@@ -5,568 +5,926 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#1a6b3c">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MyHealth">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>MyHealth — Daily Tracker</title>
+<title>MyHealth</title>
 <style>
-:root{--green:#1a6b3c;--gl:#e8f5ee;--gm:#2d9157;--amb:#b45309;--al:#fef3c7;--red:#b91c1c;--rl:#fee2e2;--blue:#1d4ed8;--bl:#dbeafe;--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--r:12px;--rs:8px;}
+:root{--gr:#1a6b3c;--gl:#e8f5ee;--am:#b45309;--al:#fef3c7;--re:#b91c1c;--rl:#fee2e2;--bl:#dbeafe;--bu:#1d4ed8;--g1:#f9fafb;--g2:#f3f4f6;--g3:#e5e7eb;--g4:#9ca3af;--g6:#4b5563;--g8:#1f2937;--r:12px;--rs:8px;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--g50);color:var(--g800);min-height:100vh;padding-bottom:80px}
-.hdr{background:var(--green);color:#fff;padding:14px 18px 11px;position:sticky;top:0;z-index:100}
-.hdr-row{display:flex;align-items:center;justify-content:space-between}
-.hdr h1{font-size:19px;font-weight:700}
-.hdr-sub{font-size:11px;opacity:.8;margin-top:2px}
-.hdr-date{font-size:11px;background:rgba(255,255,255,.2);padding:4px 10px;border-radius:20px;white-space:nowrap}
-.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--g200);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 8px rgba(0,0,0,.06)}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:7px 2px 5px;cursor:pointer;border:none;background:none;color:var(--g400);font-size:9px;font-weight:500;gap:3px;transition:color .15s}
-.ni.on{color:var(--green)}
-.ni svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.page{display:none;padding:14px;max-width:680px;margin:0 auto}
-.page.on{display:block}
-.card{background:#fff;border-radius:var(--r);padding:15px;margin-bottom:11px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.ct{font-size:14px;font-weight:600;color:var(--g800);margin-bottom:11px;display:flex;align-items:center;gap:8px}
-.ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans Devanagari',sans-serif;background:var(--g1);color:var(--g8);min-height:100vh;padding-bottom:90px}
+.hdr{background:var(--gr);color:#fff;padding:11px 14px 9px;position:sticky;top:0;z-index:100}
+.hr{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hdr h1{font-size:17px;font-weight:700}
+.hsub{font-size:11px;opacity:.8;margin-top:1px}
+.hright{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.hdate{font-size:11px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:20px;white-space:nowrap}
+.lbar{display:flex;gap:3px;background:rgba(0,0,0,.25);border-radius:20px;padding:3px}
+.lbtn{padding:3px 9px;border-radius:15px;border:none;background:transparent;color:rgba(255,255,255,.7);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.lbtn.on{background:#fff;color:var(--gr)}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--g3);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 8px rgba(0,0,0,.06);overflow-x:auto}
+.ni{flex:1;min-width:48px;display:flex;flex-direction:column;align-items:center;padding:6px 2px 4px;cursor:pointer;border:none;background:none;color:var(--g4);font-size:9px;font-weight:500;gap:2px;transition:color .15s}
+.ni.on{color:var(--gr)}
+.ni svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pg{display:none;padding:13px;max-width:680px;margin:0 auto}.pg.on{display:block}
+.card{background:#fff;border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.ct{font-size:14px;font-weight:600;color:var(--g8);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.ico{width:25px;height:25px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
 .ig{background:var(--gl)}.ia{background:var(--al)}.ir{background:var(--rl)}.ib{background:var(--bl)}
-.sg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px}
-.sc{background:#fff;border-radius:var(--r);padding:13px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.sl{font-size:10px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
-.sv{font-size:24px;font-weight:700;color:var(--g800);line-height:1}
-.su{font-size:11px;color:var(--g400);margin-top:2px}
-.mr{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--g100)}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sc{background:#fff;border-radius:var(--r);padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.sl{font-size:10px;color:var(--g4);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.sv{font-size:21px;font-weight:700;color:var(--g8);line-height:1}
+.su{font-size:11px;color:var(--g4);margin-top:2px}
+.mr{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f3f4f6}
 .mr:last-child{border-bottom:none;padding-bottom:0}
-.mt{font-size:10px;color:var(--g400);font-weight:600;min-width:68px;padding-top:2px;text-transform:uppercase;letter-spacing:.3px}
-.mn{font-size:13px;color:var(--g800);font-weight:500;line-height:1.4}
-.mnote{font-size:11px;color:var(--g400);margin-top:2px}
-.dpill-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;margin-bottom:13px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.dpill-row::-webkit-scrollbar{display:none}
-.dp{flex-shrink:0;padding:7px 15px;border-radius:20px;border:1.5px solid var(--g200);background:#fff;color:var(--g600);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
-.dp.on{background:var(--green);color:#fff;border-color:var(--green)}
+.mt2{font-size:10px;color:var(--g4);font-weight:600;min-width:65px;padding-top:2px;text-transform:uppercase;letter-spacing:.3px}
+.mn{font-size:13px;color:var(--g8);font-weight:500;line-height:1.4}
+.mnote{font-size:11px;color:var(--g4);margin-top:2px}
+.dprow{display:flex;gap:6px;overflow-x:auto;padding-bottom:3px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.dprow::-webkit-scrollbar{display:none}
+.dp{flex-shrink:0;padding:6px 13px;border-radius:20px;border:1.5px solid var(--g3);background:#fff;color:var(--g6);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.dp.on{background:var(--gr);color:#fff;border-color:var(--gr)}
 .ms{display:none}.ms.on{display:block}
-.mb{background:#fff;border-radius:var(--r);padding:13px;margin-bottom:9px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.mbt{font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px}
-.ex{background:#fff;border-radius:var(--r);padding:13px;margin-bottom:9px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;gap:11px}
-.en{width:30px;height:30px;border-radius:50%;background:var(--gl);color:var(--green);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ename{font-size:13px;font-weight:600;color:var(--g800);margin-bottom:2px}
-.edesc{font-size:12px;color:var(--g600);line-height:1.5}
-.ebadge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-top:4px}
-.bg{background:var(--gl);color:var(--green)}.ba{background:var(--al);color:var(--amb)}.bb{background:var(--bl);color:var(--blue)}
-.ci{display:flex;align-items:center;gap:11px;padding:11px;border-radius:var(--rs);cursor:pointer;transition:background .15s;border:1.5px solid var(--g200);margin-bottom:7px;background:#fff}
-.ci.done{background:var(--gl);border-color:var(--green)}
-.cc{width:21px;height:21px;border-radius:50%;border:2px solid var(--g300);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-.ci.done .cc{background:var(--green);border-color:var(--green)}
-.ck{display:none;color:#fff;font-size:12px;font-weight:700}
+.mb{background:#fff;border-radius:var(--r);padding:12px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.mbt{font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.ex{background:#fff;border-radius:var(--r);padding:12px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;gap:10px}
+.en{width:28px;height:28px;border-radius:50%;background:var(--gl);color:var(--gr);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ename{font-size:13px;font-weight:600;color:var(--g8);margin-bottom:2px}
+.edesc{font-size:12px;color:var(--g6);line-height:1.5}
+.ebg{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-top:3px}
+.bgg{background:var(--gl);color:var(--gr)}.bga{background:var(--al);color:var(--am)}.bgb{background:var(--bl);color:var(--bu)}
+.ci{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--rs);cursor:pointer;border:1.5px solid var(--g3);margin-bottom:6px;background:#fff;transition:background .15s}
+.ci.done{background:var(--gl);border-color:var(--gr)}
+.cc{width:20px;height:20px;border-radius:50%;border:2px solid var(--g3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ci.done .cc{background:var(--gr);border-color:var(--gr)}
+.ck{display:none;color:#fff;font-size:11px;font-weight:700}
 .ci.done .ck{display:block}
-.cl{font-size:13px;color:var(--g800);font-weight:500}
-.ci.done .cl{color:var(--green)}
-.wg{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:9px}
-.wgl{aspect-ratio:1;border-radius:9px;border:2px solid var(--g200);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all .15s}
-.wgl.filled{background:var(--bl);border-color:var(--blue)}
-.pw{margin-bottom:9px}
-.ph{display:flex;justify-content:space-between;font-size:12px;color:var(--g600);margin-bottom:4px}
-.pb{height:6px;background:var(--g100);border-radius:3px;overflow:hidden}
-.pf{height:100%;border-radius:3px;transition:width .3s}
-.fg{background:var(--green)}.fb{background:var(--blue)}.fa{background:#d97706}
-.sh{font-size:12px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin:15px 0 7px}
-.ban{border-radius:var(--rs);padding:11px 13px;margin-bottom:11px;font-size:13px;line-height:1.5}
-.ban.g{background:var(--gl);color:var(--green);border-left:3px solid var(--green);border-radius:0 var(--rs) var(--rs) 0}
-.ban.a{background:var(--al);color:var(--amb);border-left:3px solid var(--amb);border-radius:0 var(--rs) var(--rs) 0}
-.ban.r{background:var(--rl);color:var(--red);border-left:3px solid var(--red);border-radius:0 var(--rs) var(--rs) 0}
-.ban.b{background:var(--bl);color:var(--blue);border-left:3px solid var(--blue);border-radius:0 var(--rs) var(--rs) 0}
-.ms-time{font-size:10px;font-weight:600;color:var(--green);min-width:68px;background:var(--gl);padding:3px 7px;border-radius:7px;height:fit-content}
-.ai-item{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--g100);font-size:13px;color:var(--g600);line-height:1.5}
-.ai-item:last-child{border-bottom:none}
-.ai-dot{color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px}
-.av-item{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--g100);font-size:13px}
-.av-item:last-child{border-bottom:none}
-.avd{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px}
-.dr{background:var(--rl);color:var(--red)}.da{background:var(--al);color:var(--amb)}.dg{background:var(--gl);color:var(--green)}
-.swr{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--g100);font-size:13px}
+.cl{font-size:13px;color:var(--g8);font-weight:500}
+.ci.done .cl{color:var(--gr)}
+.wg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.wgl{aspect-ratio:1;border-radius:8px;border:2px solid var(--g3);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .15s}
+.wgl.filled{background:var(--bl);border-color:var(--bu)}
+.pw{margin-bottom:8px}
+.ph{display:flex;justify-content:space-between;font-size:12px;color:var(--g6);margin-bottom:3px}
+.pb{height:5px;background:var(--g2);border-radius:3px;overflow:hidden}
+.pf{height:100%;border-radius:3px}.fg{background:var(--gr)}.fb{background:var(--bu)}.fa{background:#d97706}
+.sh{font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.5px;margin:13px 0 6px}
+.ban{border-radius:var(--rs);padding:10px 12px;margin-bottom:10px;font-size:13px;line-height:1.5}
+.ban.g{background:var(--gl);color:var(--gr);border-left:3px solid var(--gr);border-radius:0 var(--rs) var(--rs) 0}
+.ban.a{background:var(--al);color:var(--am);border-left:3px solid var(--am);border-radius:0 var(--rs) var(--rs) 0}
+.ban.r{background:var(--rl);color:var(--re);border-left:3px solid var(--re);border-radius:0 var(--rs) var(--rs) 0}
+.ban.b{background:var(--bl);color:var(--bu);border-left:3px solid var(--bu);border-radius:0 var(--rs) var(--rs) 0}
+.mst{font-size:10px;font-weight:600;color:var(--gr);min-width:65px;background:var(--gl);padding:3px 7px;border-radius:7px;height:fit-content}
+.tip{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--g2);font-size:13px;color:var(--g6);line-height:1.5}
+.tip:last-child{border-bottom:none}
+.tdot{color:var(--gr);font-size:13px;flex-shrink:0;margin-top:1px}
+.avit{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--g2);font-size:13px}
+.avit:last-child{border-bottom:none}
+.avd{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:2px}
+.dr{background:var(--rl);color:var(--re)}.da{background:var(--al);color:var(--am)}.dg{background:var(--gl);color:var(--gr)}
+.swr{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--g2);font-size:13px}
 .swr:last-child{border-bottom:none}
-.swf{color:var(--red);flex:1;text-decoration:line-through}
-.swt{color:var(--green);flex:1;font-weight:500}
-.swa{color:var(--g400);font-size:15px}
-.streak{background:var(--green);color:#fff;border-radius:var(--r);padding:15px;margin-bottom:11px;text-align:center}
-.streak-n{font-size:46px;font-weight:800;line-height:1}
-.streak-l{font-size:12px;opacity:.85;margin-top:3px}
-.btn{display:block;width:100%;padding:13px;border-radius:var(--rs);border:none;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;text-align:center;margin-top:9px;font-family:inherit}
-.btn-outline{background:#fff;color:var(--g600);border:1.5px solid var(--g200)}
-.btn-green{background:var(--green);color:#fff}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.notif{position:fixed;top:66px;left:50%;transform:translateX(-50%);background:var(--g800);color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.swf{color:var(--re);flex:1;text-decoration:line-through}.swt{color:var(--gr);flex:1;font-weight:500}.swa{color:var(--g4);font-size:14px}
+.stk{background:var(--gr);color:#fff;border-radius:var(--r);padding:14px;margin-bottom:10px;text-align:center}
+.stn{font-size:44px;font-weight:800;line-height:1}
+.stl{font-size:12px;opacity:.85;margin-top:3px}
+.gbtn{width:100%;padding:12px;background:var(--gr);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.gbtn:active{opacity:.85}.gbtn:disabled{opacity:.5;cursor:not-allowed}
+.btn{display:block;width:100%;padding:12px;border-radius:var(--rs);border:none;font-size:13px;font-weight:600;cursor:pointer;text-align:center;margin-top:8px;font-family:inherit}
+.btn-ol{background:#fff;color:var(--g6);border:1.5px solid var(--g3)}
+.notif{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:var(--g8);color:#fff;padding:8px 16px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .notif.show{opacity:1}
-/* swap */
-.lbl{font-size:12px;font-weight:600;color:var(--g600);margin-bottom:5px;display:block}
-.inp{width:100%;padding:12px 14px;border:1.5px solid var(--g200);border-radius:var(--rs);font-size:14px;font-family:inherit;outline:none;color:var(--g800);background:#fff;margin-bottom:9px}
-.inp:focus{border-color:var(--green)}
-.sel{width:100%;padding:12px 14px;border:1.5px solid var(--g200);border-radius:var(--rs);font-size:14px;font-family:inherit;outline:none;color:var(--g800);background:#fff;margin-bottom:9px;appearance:none;cursor:pointer}
-.sel:focus{border-color:var(--green)}
-.gbtn{width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
-.gbtn:active{opacity:.85}
-.gbtn:disabled{opacity:.5;cursor:not-allowed}
-.rb{border-radius:var(--r);padding:16px;margin-top:13px;display:none}
-.rb.show{display:block}
-.rv{font-size:21px;font-weight:800;margin-bottom:5px}
-.rs{font-size:14px;font-weight:600;margin-bottom:9px}
-.rd{font-size:13px;line-height:1.6}
+.lbl{font-size:12px;font-weight:600;color:var(--g6);margin-bottom:4px;display:block}
+.inp{width:100%;padding:11px 13px;border:1.5px solid var(--g3);border-radius:var(--rs);font-size:14px;font-family:inherit;outline:none;color:var(--g8);background:#fff;margin-bottom:8px}
+.inp:focus{border-color:var(--gr)}
+.sel{width:100%;padding:11px 13px;border:1.5px solid var(--g3);border-radius:var(--rs);font-size:14px;font-family:inherit;outline:none;color:var(--g8);background:#fff;margin-bottom:8px;appearance:none;cursor:pointer}
+.sel:focus{border-color:var(--gr)}
+.rb{border-radius:var(--r);padding:15px;margin-top:12px;display:none}.rb.show{display:block}
+.rv{font-size:20px;font-weight:800;margin-bottom:4px}
+.rs2{font-size:14px;font-weight:600;margin-bottom:8px}
 .rg{background:var(--gl);border:1.5px solid #86efac}
 .ram{background:var(--al);border:1.5px solid #fcd34d}
 .rr{background:var(--rl);border:1.5px solid #fca5a5}
-.rsect{margin-top:11px;padding-top:11px;border-top:1px solid rgba(0,0,0,.08)}
-.rsect-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;opacity:.7}
+.rsec{margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.07)}
+.rsect{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;opacity:.7}
 .rl2{list-style:none;padding:0}
-.rl2 li{padding:2px 0;font-size:13px;display:flex;gap:6px}
+.rl2 li{padding:2px 0;font-size:13px;display:flex;gap:5px}
 .rl2 li::before{content:'•';flex-shrink:0}
-.qchip{display:inline-block;padding:6px 11px;border:1.5px solid var(--g200);border-radius:20px;font-size:12px;color:var(--g600);cursor:pointer;margin:3px;background:#fff;transition:all .15s}
-.qchip:hover{border-color:var(--green);color:var(--green)}
-.hi{padding:9px 11px;border-radius:var(--rs);background:#fff;border:1px solid var(--g100);margin-bottom:5px;cursor:pointer;display:flex;align-items:center;gap:9px}
+.qc{display:inline-block;padding:5px 10px;border:1.5px solid var(--g3);border-radius:20px;font-size:12px;color:var(--g6);cursor:pointer;margin:3px;background:#fff;transition:all .15s}
+.qc:hover{border-color:var(--gr);color:var(--gr)}
+.hi{padding:8px 10px;border-radius:var(--rs);background:#fff;border:1px solid var(--g2);margin-bottom:4px;cursor:pointer;display:flex;align-items:center;gap:8px}
 .hv{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.hvg{background:var(--green)}.hva{background:#d97706}.hvr{background:var(--red)}
-/* ai chef */
-.itag{display:inline-flex;align-items:center;gap:4px;background:var(--gl);color:var(--green);border:1.5px solid #86efac;border-radius:20px;padding:4px 9px 4px 11px;font-size:12px;font-weight:500;margin:3px}
-.itag-x{background:none;border:none;color:var(--green);cursor:pointer;font-size:15px;line-height:1;padding:0;font-weight:700;opacity:.7}
-.irow{display:flex;gap:7px;margin-bottom:9px}
-.iinp{flex:1;padding:11px 13px;border:1.5px solid var(--g200);border-radius:var(--rs);font-size:14px;font-family:inherit;outline:none;color:var(--g800);background:#fff}
-.iinp:focus{border-color:var(--green)}
-.iadd{padding:11px 15px;background:var(--green);color:#fff;border:none;border-radius:var(--rs);font-size:19px;cursor:pointer;line-height:1;flex-shrink:0}
-.cscroll{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:9px}
-.cscroll::-webkit-scrollbar{display:none}
-.cbtn{padding:6px 12px;border:1.5px solid var(--g200);border-radius:20px;background:#fff;color:var(--g600);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
-.cbtn.on{background:var(--bl);color:var(--blue);border-color:#93c5fd}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:5px;margin-bottom:3px;max-height:155px;overflow-y:auto}
-.pchip{padding:7px 6px;border:1.5px solid var(--g200);border-radius:var(--rs);background:#fff;color:var(--g700);font-size:11px;cursor:pointer;text-align:center;transition:all .15s;line-height:1.3;font-family:inherit}
-.pchip.on{background:var(--gl);border-color:#86efac;color:var(--green)}
-.pfchip{display:inline-block;padding:6px 12px;border:1.5px solid var(--g200);border-radius:20px;font-size:12px;color:var(--g600);cursor:pointer;margin:3px;background:#fff;transition:all .15s;font-family:inherit}
-.pfchip.on{background:var(--gl);border-color:var(--green);color:var(--green)}
-.mres{background:#fff;border-radius:var(--r);border:1px solid var(--g100);padding:15px;margin-bottom:9px}
-.mres-t{font-size:16px;font-weight:700;color:var(--g800);margin-bottom:3px}
-.mres-s{font-size:11px;color:var(--g400);margin-bottom:11px}
-.rstep{display:flex;gap:9px;padding:6px 0;border-bottom:1px solid var(--g100);font-size:13px;color:var(--g700);line-height:1.5}
-.rstep:last-child{border-bottom:none}
-.rsn{width:21px;height:21px;border-radius:50%;background:var(--gl);color:var(--green);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:10px 0}
-.nb{background:var(--g50);border-radius:7px;padding:7px;text-align:center}
-.nv{font-size:15px;font-weight:700;color:var(--g800)}
-.nl{font-size:9px;color:var(--g400);margin-top:1px}
-.fbtn{padding:6px 12px;border:1.5px solid var(--green);border-radius:20px;background:#fff;color:var(--green);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
-.fbtn:hover{background:var(--gl)}
-.aic{text-align:center;padding:28px 16px;color:var(--g400)}
-.spin{font-size:30px;animation:spin 1.5s linear infinite;display:inline-block}
+.hvg{background:var(--gr)}.hva{background:#d97706}.hvr{background:var(--re)}
+.itag{display:inline-flex;align-items:center;gap:3px;background:var(--gl);color:var(--gr);border:1.5px solid #86efac;border-radius:20px;padding:3px 8px 3px 10px;font-size:11px;font-weight:500;margin:2px}
+.itx{background:none;border:none;color:var(--gr);cursor:pointer;font-size:14px;line-height:1;padding:0;font-weight:700;opacity:.7}
+.irow{display:flex;gap:6px;margin-bottom:8px}
+.iinp{flex:1;padding:10px 12px;border:1.5px solid var(--g3);border-radius:var(--rs);font-size:14px;font-family:inherit;outline:none;color:var(--g8);background:#fff}
+.iinp:focus{border-color:var(--gr)}
+.iadd{padding:10px 14px;background:var(--gr);color:#fff;border:none;border-radius:var(--rs);font-size:18px;cursor:pointer;line-height:1;flex-shrink:0}
+.csc{display:flex;gap:4px;overflow-x:auto;padding-bottom:3px;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:8px}
+.csc::-webkit-scrollbar{display:none}
+.cbtn{padding:5px 11px;border:1.5px solid var(--g3);border-radius:20px;background:#fff;color:var(--g6);font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
+.cbtn.on{background:var(--bl);color:var(--bu);border-color:#93c5fd}
+.pgd{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:4px;margin-bottom:3px;max-height:150px;overflow-y:auto}
+.pch{padding:6px 5px;border:1.5px solid var(--g3);border-radius:var(--rs);background:#fff;color:var(--g6);font-size:11px;cursor:pointer;text-align:center;transition:all .15s;line-height:1.3;font-family:inherit}
+.pch.on{background:var(--gl);border-color:#86efac;color:var(--gr)}
+.pfc{display:inline-block;padding:5px 11px;border:1.5px solid var(--g3);border-radius:20px;font-size:12px;color:var(--g6);cursor:pointer;margin:3px;background:#fff;transition:all .15s;font-family:inherit}
+.pfc.on{background:var(--gl);border-color:var(--gr);color:var(--gr)}
+.mres{background:#fff;border-radius:var(--r);border:1px solid var(--g2);padding:14px;margin-bottom:8px}
+.ngd{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:9px 0}
+.nb{background:var(--g1);border-radius:6px;padding:6px;text-align:center}
+.nv{font-size:14px;font-weight:700;color:var(--g8)}
+.nl{font-size:9px;color:var(--g4);margin-top:1px}
+.fbtn{padding:5px 11px;border:1.5px solid var(--gr);border-radius:20px;background:#fff;color:var(--gr);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit}
+.apib{background:var(--bl);border:1.5px solid #93c5fd;border-radius:var(--r);padding:14px;margin-bottom:11px}
+.apib h3{font-size:13px;font-weight:600;color:var(--bu);margin-bottom:7px}
+.apib p{font-size:12px;color:var(--g6);line-height:1.5;margin-bottom:7px}
+.akr{display:flex;gap:6px}
+.aki{flex:1;padding:9px 11px;border:1.5px solid #93c5fd;border-radius:var(--rs);font-size:13px;font-family:inherit;outline:none;background:#fff}
+.aki:focus{border-color:var(--bu)}
+.akb{padding:9px 12px;background:var(--bu);color:#fff;border:none;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.aks{font-size:12px;margin-top:6px;padding:5px 9px;border-radius:6px;display:none}
+.akok{background:var(--gl);color:var(--gr)}.akno{background:var(--rl);color:var(--re)}
+.spin{font-size:28px;animation:spin 1.5s linear infinite;display:inline-block}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.icnt{font-size:11px;color:var(--g400);margin-top:5px}
+.icnt{font-size:11px;color:var(--g4);margin-top:4px}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="hdr-row">
-    <div><h1>🌿 MyHealth</h1><div class="hdr-sub">Personal diet &amp; exercise tracker</div></div>
-    <div class="hdr-date" id="hdr-date"></div>
+  <div class="hr">
+    <div><h1>🌿 MyHealth</h1><div class="hsub" id="hsub">Personal diet &amp; exercise tracker</div></div>
+    <div class="hright">
+      <div class="hdate" id="hdate"></div>
+      <div class="lbar">
+        <button class="lbtn on" onclick="setLang('en',this)">EN</button>
+        <button class="lbtn" onclick="setLang('hi',this)">हि</button>
+        <button class="lbtn" onclick="setLang('mr',this)">म</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- HOME -->
-<div id="p-home" class="page on">
-  <div class="streak"><div class="streak-n" id="streak-num">0</div><div class="streak-l">day streak — keep going! 💪</div></div>
+<div id="p-home" class="pg on">
+  <div class="stk"><div class="stn" id="stk-n">0</div><div class="stl" id="stk-l">day streak</div></div>
   <div class="sg">
-    <div class="sc"><div class="sl">Calories</div><div class="sv">1,500</div><div class="su">kcal per day</div></div>
-    <div class="sc"><div class="sl">Water</div><div class="sv">10</div><div class="su">glasses daily</div></div>
-    <div class="sc"><div class="sl">Exercise</div><div class="sv">35</div><div class="su">min per day</div></div>
-    <div class="sc"><div class="sl">Monthly goal</div><div class="sv">1–2 kg</div><div class="su">safe loss</div></div>
+    <div class="sc"><div class="sl" id="s1l">Calories</div><div class="sv">1,500</div><div class="su" id="s1u">kcal/day</div></div>
+    <div class="sc"><div class="sl" id="s2l">Water</div><div class="sv">10</div><div class="su" id="s2u">glasses/day</div></div>
+    <div class="sc"><div class="sl" id="s3l">Exercise</div><div class="sv">35</div><div class="su" id="s3u">min/day</div></div>
+    <div class="sc"><div class="sl" id="s4l">Goal</div><div class="sv">1–2kg</div><div class="su" id="s4u">safe/month</div></div>
   </div>
   <div class="card">
-    <div class="ct"><div class="ico ig">⏰</div> Today's schedule</div>
-    <div class="mr"><div class="mt">6:30 AM</div><div><div class="mn">Warm lemon water or jeera water</div><div class="mnote">Kickstarts metabolism</div></div></div>
-    <div class="mr"><div class="mt">7:30 AM</div><div><div class="mn">Morning exercises — 20 to 25 min seated</div></div></div>
-    <div class="mr"><div class="mt">8:30 AM</div><div><div class="mn">Breakfast</div></div></div>
-    <div class="mr"><div class="mt">11:00 AM</div><div><div class="mn">Mid-morning snack — fruit + nuts</div></div></div>
-    <div class="mr"><div class="mt">1:00 PM</div><div><div class="mn">Lunch — main meal of the day</div></div></div>
-    <div class="mr"><div class="mt">4:00 PM</div><div><div class="mn">Evening snack + shoulder stretches</div></div></div>
-    <div class="mr"><div class="mt">7:30 PM</div><div><div class="mn">Dinner — light and early</div></div></div>
-    <div class="mr"><div class="mt">9:30 PM</div><div><div class="mn">Turmeric milk before sleep</div><div class="mnote">Reduces joint inflammation overnight</div></div></div>
+    <div class="ct"><div class="ico ig">⏰</div><span id="sch-t">Today's Schedule</span></div>
+    <div class="mr"><div class="mt2">6:30</div><div><div class="mn" id="sc1">Warm lemon/jeera water</div><div class="mnote" id="sc1n">Kickstarts metabolism</div></div></div>
+    <div class="mr"><div class="mt2">7:30</div><div><div class="mn" id="sc2">Morning exercises — 20–25 min seated</div></div></div>
+    <div class="mr"><div class="mt2">8:30</div><div><div class="mn" id="sc3">Breakfast</div></div></div>
+    <div class="mr"><div class="mt2">11:00</div><div><div class="mn" id="sc4">Mid-morning snack</div></div></div>
+    <div class="mr"><div class="mt2">1:00</div><div><div class="mn" id="sc5">Lunch — main meal</div></div></div>
+    <div class="mr"><div class="mt2">4:00</div><div><div class="mn" id="sc6">Snack + shoulder stretches</div></div></div>
+    <div class="mr"><div class="mt2">7:30</div><div><div class="mn" id="sc7">Dinner — light &amp; early</div></div></div>
+    <div class="mr"><div class="mt2">9:30</div><div><div class="mn" id="sc8">Turmeric milk</div><div class="mnote" id="sc8n">Reduces joint inflammation</div></div></div>
   </div>
   <div class="card">
-    <div class="ct"><div class="ico ig">🎯</div> Nutrition targets</div>
-    <div class="pw"><div class="ph"><span>Protein (25–30%)</span><span>~112g</span></div><div class="pb"><div class="pf fb" style="width:28%"></div></div></div>
-    <div class="pw"><div class="ph"><span>Carbohydrates (40–45%)</span><span>~165g</span></div><div class="pb"><div class="pf fg" style="width:43%"></div></div></div>
-    <div class="pw"><div class="ph"><span>Healthy fats (25–30%)</span><span>~50g</span></div><div class="pb"><div class="pf fa" style="width:27%"></div></div></div>
+    <div class="ct"><div class="ico ig">🎯</div><span id="nut-t">Nutrition Targets</span></div>
+    <div class="pw"><div class="ph"><span id="np1">Protein 25–30%</span><span>~112g</span></div><div class="pb"><div class="pf fb" style="width:28%"></div></div></div>
+    <div class="pw"><div class="ph"><span id="np2">Carbs 40–45%</span><span>~165g</span></div><div class="pb"><div class="pf fg" style="width:43%"></div></div></div>
+    <div class="pw"><div class="ph"><span id="np3">Fats 25–30%</span><span>~50g</span></div><div class="pb"><div class="pf fa" style="width:27%"></div></div></div>
   </div>
   <div class="card">
-    <div class="ct"><div class="ico ig">📈</div> Milestones</div>
-    <div class="mr"><div class="ms-time">Week 1–2</div><div class="mn" style="font-size:13px;font-weight:400;color:var(--g600)">Feel lighter, better energy, less bloating</div></div>
-    <div class="mr"><div class="ms-time">Month 1</div><div class="mn" style="font-size:13px;font-weight:400;color:var(--g600)">1–2 kg loss, more energy on crutches</div></div>
-    <div class="mr"><div class="ms-time">Month 3</div><div class="mn" style="font-size:13px;font-weight:400;color:var(--g600)">Less shoulder pain, easier mobility</div></div>
-    <div class="mr"><div class="ms-time">Month 6</div><div class="mn" style="font-size:13px;font-weight:400;color:var(--g600)">6–8 kg loss, standing and walking much easier</div></div>
+    <div class="ct"><div class="ico ig">📈</div><span id="mil-t">Milestones</span></div>
+    <div class="mr"><div class="mst" id="m1t">Wk 1–2</div><div class="mn" style="font-size:13px;font-weight:400;color:var(--g6)" id="m1">Feel lighter, better energy</div></div>
+    <div class="mr"><div class="mst" id="m2t">Month 1</div><div class="mn" style="font-size:13px;font-weight:400;color:var(--g6)" id="m2">1–2kg loss, more energy on crutches</div></div>
+    <div class="mr"><div class="mst" id="m3t">Month 3</div><div class="mn" style="font-size:13px;font-weight:400;color:var(--g6)" id="m3">Less shoulder pain, easier mobility</div></div>
+    <div class="mr"><div class="mst" id="m4t">Month 6</div><div class="mn" style="font-size:13px;font-weight:400;color:var(--g6)" id="m4">6–8kg loss, much easier walking</div></div>
   </div>
 </div>
 
-<!-- DIET -->
-<div id="p-diet" class="page">
-  <div class="dpill-row">
-    <div class="dp on" onclick="showDay('mon',this)">Monday</div>
-    <div class="dp" onclick="showDay('tue',this)">Tuesday</div>
-    <div class="dp" onclick="showDay('wed',this)">Wednesday</div>
-    <div class="dp" onclick="showDay('thu',this)">Thursday</div>
-    <div class="dp" onclick="showDay('fri',this)">Friday</div>
-    <div class="dp" onclick="showDay('sat',this)">Saturday</div>
-    <div class="dp" onclick="showDay('sun',this)">Sunday</div>
-  </div>
-  <div id="d-mon" class="ms on">
-    <div class="mb"><div class="mbt">🌅 Breakfast</div><div class="mn">2 moong dal chilla + green chutney + low-sugar masala chai</div><div class="mnote">Non-stick tawa, 1/2 tsp oil. High protein, filling.</div></div>
-    <div class="mb"><div class="mbt">☀️ Mid-morning</div><div class="mn">1 banana + 5 almonds</div></div>
-    <div class="mb"><div class="mbt">🍽️ Lunch</div><div class="mn">1 cup brown rice + dal tadka (jeera, hing, green chilli, 1 tsp oil) + cucumber-onion salad + curd</div></div>
-    <div class="mb"><div class="mbt">🫖 Snack</div><div class="mn">Roasted chana + chaas with jeera and black salt</div></div>
-    <div class="mb"><div class="mbt">🌙 Dinner</div><div class="mn">2 jowar/bajra rotis + palak sabzi + 1 bowl dal</div><div class="mnote">No rice at night</div></div>
-  </div>
-  <div id="d-tue" class="ms">
-    <div class="mb"><div class="mbt">🌅 Breakfast</div><div class="mn">Poha (mustard seeds, curry leaves, green chilli, peas, onion) + curd + lemon</div><div class="mnote">Less than 1 tsp oil</div></div>
-    <div class="mb"><div class="mbt">☀️ Mid-morning</div><div class="mn">1 guava or orange + 4 walnuts</div></div>
-    <div class="mb"><div class="mbt">🍽️ Lunch</div><div class="mn">2 wheat rotis + rajma curry (less oil) + salad + low-fat curd</div></div>
-    <div class="mb"><div class="mbt">🫖 Snack</div><div class="mn">Roasted makhana with chilli and black pepper</div></div>
-    <div class="mb"><div class="mbt">🌙 Dinner</div><div class="mn">Moong dal khichdi (light ghee, turmeric, jeera) + vegetable soup</div></div>
-  </div>
-  <div id="d-wed" class="ms">
-    <div class="mb"><div class="mbt">🌅 Breakfast</div><div class="mn">Besan or egg omelette (chilli, coriander, onion, 1/2 tsp oil) + 1 multigrain toast</div></div>
-    <div class="mb"><div class="mbt">☀️ Mid-morning</div><div class="mn">Coconut water or nimbu pani (no sugar, black salt)</div></div>
-    <div class="mb"><div class="mbt">🍽️ Lunch</div><div class="mn">2 rotis + dry chana masala (less oil) + jeera raita + salad</div></div>
-    <div class="mb"><div class="mbt">🫖 Snack</div><div class="mn">Sprouts chaat — moong, onion, tomato, chaat masala, lemon</div></div>
-    <div class="mb"><div class="mbt">🌙 Dinner</div><div class="mn">Vegetable dalia (broken wheat) + 1 bowl dal + curd</div></div>
-  </div>
-  <div id="d-thu" class="ms">
-    <div class="mb"><div class="mbt">🌅 Breakfast</div><div class="mn">2–3 idli + light sambar + green chutney</div><div class="mnote">Fermented food — great for gut health</div></div>
-    <div class="mb"><div class="mbt">☀️ Mid-morning</div><div class="mn">1 apple + 5 almonds</div></div>
-    <div class="mb"><div class="mbt">🍽️ Lunch</div><div class="mn">1 cup brown rice + mixed veg sabzi (dry, minimal oil) + sambhar + curd</div></div>
-    <div class="mb"><div class="mbt">🫖 Snack</div><div class="mn">Green tea + small handful roasted peanuts</div></div>
-    <div class="mb"><div class="mbt">🌙 Dinner</div><div class="mn">2 jowar rotis + lauki sabzi + moong dal</div></div>
-  </div>
-  <div id="d-fri" class="ms">
-    <div class="mb"><div class="mbt">🌅 Breakfast</div><div class="mn">Upma (sooji, vegetables, mustard seeds, curry leaves, green chilli) + coconut chutney</div><div class="mnote">As spicy as you like!</div></div>
-    <div class="mb"><div class="mbt">☀️ Mid-morning</div><div class="mn">Nimbu sharbat (no sugar, sendha namak) + 4 almonds</div></div>
-    <div class="mb"><div class="mbt">🍽️ Lunch</div><div class="mn">2 rotis + skinless chicken curry (minimal oil) OR dry paneer bhurji + salad + curd</div></div>
-    <div class="mb"><div class="mbt">🫖 Snack</div><div class="mn">Chaas + boiled corn chaat with chilli and lemon</div></div>
-    <div class="mb"><div class="mbt">🌙 Dinner</div><div class="mn">Khichdi + vegetable soup + curd</div></div>
-  </div>
-  <div id="d-sat" class="ms">
-    <div class="mb"><div class="mbt">🌅 Breakfast</div><div class="mn">2 besan chilla + mint chutney + low-sugar chai</div></div>
-    <div class="mb"><div class="mbt">☀️ Mid-morning</div><div class="mn">1 bowl papaya or watermelon</div></div>
-    <div class="mb"><div class="mbt">🍽️ Lunch</div><div class="mn">Dry chole (less oil) + 1 cup brown rice or 2 rotis + salad + raita</div><div class="mnote">Small treat day — keep portions mindful</div></div>
-    <div class="mb"><div class="mbt">🫖 Snack</div><div class="mn">Roasted makhana + green tea or chaas</div></div>
-    <div class="mb"><div class="mbt">🌙 Dinner</div><div class="mn">2 rotis + palak/methi sabzi + dal + curd</div></div>
-  </div>
-  <div id="d-sun" class="ms">
-    <div class="ban g">🌿 Sunday — light day. Rest your digestion, recharge for the week.</div>
-    <div class="mb"><div class="mbt">🌅 Breakfast</div><div class="mn">Oats porridge (low-fat milk) + flax/chia seeds + 1 tsp honey</div><div class="mnote">Or savoury oats with jeera, green chilli, veggies</div></div>
-    <div class="mb"><div class="mbt">☀️ Mid-morning</div><div class="mn">1 orange or sweet lime + 4 walnuts</div></div>
-    <div class="mb"><div class="mbt">🍽️ Lunch</div><div class="mn">Dal khichdi (light ghee) + roasted papad + curd + green chutney</div></div>
-    <div class="mb"><div class="mbt">🫖 Snack</div><div class="mn">Chaas + sprouts chaat</div></div>
-    <div class="mb"><div class="mbt">🌙 Dinner</div><div class="mn">Chunky vegetable soup with spices + 2 small rotis + light sabzi</div></div>
-  </div>
-  <div class="ban b" style="margin-top:6px">💧 Drink a glass of water before every meal. Target: 3 litres daily.</div>
+<div id="p-diet" class="pg">
+  <div class="dprow" id="day-pills"></div>
+  <div id="d-mon" class="ms on"></div>
+  <div id="d-tue" class="ms"></div>
+  <div id="d-wed" class="ms"></div>
+  <div id="d-thu" class="ms"></div>
+  <div id="d-fri" class="ms"></div>
+  <div id="d-sat" class="ms"></div>
+  <div id="d-sun" class="ms"></div>
+  <div class="ban b" id="wn">💧 Drink water before every meal. Target: 3 litres daily.</div>
 </div>
 
-<!-- EXERCISE -->
-<div id="p-exercise" class="page">
-  <div class="ban r">⚠️ All exercises seated in wheelchair or lying on bed. No standing needed. Stop if sharp pain.</div>
-  <div class="sh">🌅 Morning — 20 to 25 minutes</div>
-  <div class="ex"><div class="en">1</div><div><div class="ename">Seated deep breathing</div><div class="edesc">Sit upright. Breathe in 4 counts, hold 2, out 6. Activates core, reduces shoulder tension.</div><div class="ebadge bb">5 min</div></div></div>
-  <div class="ex"><div class="en">2</div><div><div class="ename">Seated arm circles</div><div class="edesc">Small slow circles — 15 forward, 15 backward. Warms up shoulder joints gently.</div><div class="ebadge bb">3 min</div></div></div>
-  <div class="ex"><div class="en">3</div><div><div class="ename">Shoulder blade squeezes ⭐</div><div class="edesc">Squeeze blades together, hold 5 sec, release. 15 times. Most important — builds crutch-support muscles. Do this DAILY even if you skip everything else.</div><div class="ebadge bg">3 min — most important</div></div></div>
-  <div class="ex"><div class="en">4</div><div><div class="ename">Seated neck stretches</div><div class="edesc">Tilt head side to side, hold 10 sec each. Chin to chest, hold 10 sec. Releases crutch tension.</div><div class="ebadge ba">2 min</div></div></div>
-  <div class="ex"><div class="en">5</div><div><div class="ename">Seated torso twists</div><div class="edesc">Hands on shoulders, twist left and right slowly. 20 reps. Burns calories, works core muscles.</div><div class="ebadge bb">3 min</div></div></div>
-  <div class="ex"><div class="en">6</div><div><div class="ename">Seated forward punches 🔥</div><div class="edesc">Punch alternately left-right at moderate pace. 3 sets of 30. Your cardio — raises heart rate, burns fat.</div><div class="ebadge bg">5 min — best fat burner</div></div></div>
-  <div class="ex"><div class="en">7</div><div><div class="ename">Wheelchair push intervals</div><div class="edesc">Push wheelchair yourself. 30 sec fast, 30 sec rest, repeat 5 times. Great shoulder and arm workout.</div><div class="ebadge ba">5 min</div></div></div>
-  <div class="sh">🌙 Evening — 10 to 15 minutes</div>
-  <div class="ex"><div class="en">1</div><div><div class="ename">Resistance band pulls</div><div class="edesc">Pull band apart in front of you, hold 3 sec, release. 3 sets of 12. Builds exact muscles for crutch use.</div><div class="ebadge bb">5 min</div></div></div>
-  <div class="ex"><div class="en">2</div><div><div class="ename">Lying leg raises</div><div class="edesc">Raise left leg slowly 10–15 times. Lift right leg gently with hands. Improves circulation.</div><div class="ebadge ba">3 min</div></div></div>
-  <div class="ex"><div class="en">3</div><div><div class="ename">Shoulder self-massage</div><div class="edesc">Warm mustard oil. Press and rub shoulder muscles with opposite hand. Rotate both wrists in circles.</div><div class="ebadge bg">5 min — do every night</div></div></div>
-  <div class="ban g" style="margin-top:7px">📈 Week 1: just 15 min total. Add 5 min every 2 weeks. Within 6 weeks — real improvement in shoulder strength.</div>
+<div id="p-exercise" class="pg">
+  <div class="ban r" id="exw">⚠️ All exercises seated/lying. No standing. Stop if sharp pain.</div>
+  <div class="sh" id="exm">🌅 Morning — 20–25 minutes</div>
+  <div class="ex"><div class="en">1</div><div><div class="ename" id="e1n">Seated deep breathing</div><div class="edesc" id="e1d">Breathe in 4 counts, hold 2, out 6. Activates core, reduces shoulder tension.</div><div class="ebg bgb" id="e1b">5 min</div></div></div>
+  <div class="ex"><div class="en">2</div><div><div class="ename" id="e2n">Arm circles</div><div class="edesc" id="e2d">15 forward, 15 backward. Warms up shoulder joints.</div><div class="ebg bgb" id="e2b">3 min</div></div></div>
+  <div class="ex"><div class="en">3</div><div><div class="ename" id="e3n">Shoulder blade squeezes ⭐</div><div class="edesc" id="e3d">Squeeze together 5 sec, release. 15 times. DO DAILY — builds crutch muscles.</div><div class="ebg bgg" id="e3b">3 min — MOST IMPORTANT</div></div></div>
+  <div class="ex"><div class="en">4</div><div><div class="ename" id="e4n">Neck stretches</div><div class="edesc" id="e4d">Tilt side to side, 10 sec each. Releases crutch tension.</div><div class="ebg bga" id="e4b">2 min</div></div></div>
+  <div class="ex"><div class="en">5</div><div><div class="ename" id="e5n">Torso twists</div><div class="edesc" id="e5d">Hands on shoulders, twist left and right. 20 reps. Burns calories.</div><div class="ebg bgb" id="e5b">3 min</div></div></div>
+  <div class="ex"><div class="en">6</div><div><div class="ename" id="e6n">Seated punches 🔥</div><div class="edesc" id="e6d">Alternating punches. 3 sets of 30. Your cardio — best fat burner.</div><div class="ebg bgg" id="e6b">5 min — BEST FAT BURNER</div></div></div>
+  <div class="ex"><div class="en">7</div><div><div class="ename" id="e7n">Wheelchair push intervals</div><div class="edesc" id="e7d">30 sec fast push, 30 sec rest, 5 times.</div><div class="ebg bga" id="e7b">5 min</div></div></div>
+  <div class="sh" id="exe">🌙 Evening — 10–15 minutes</div>
+  <div class="ex"><div class="en">1</div><div><div class="ename" id="e8n">Resistance band pulls</div><div class="edesc" id="e8d">Pull apart, hold 3 sec, release. 3×12. Builds crutch muscles.</div><div class="ebg bgb" id="e8b">5 min</div></div></div>
+  <div class="ex"><div class="en">2</div><div><div class="ename" id="e9n">Lying leg raises</div><div class="edesc" id="e9d">Left leg 10–15 times. Right leg with hands. Improves circulation.</div><div class="ebg bga" id="e9b">3 min</div></div></div>
+  <div class="ex"><div class="en">3</div><div><div class="ename" id="e10n">Shoulder massage</div><div class="edesc" id="e10d">Warm mustard oil. Press shoulder muscles. Rotate wrists.</div><div class="ebg bgg" id="e10b">5 min — every night</div></div></div>
+  <div class="ban g" id="ext">📈 Week 1: just 15 min. Add 5 min every 2 weeks.</div>
 </div>
 
-<!-- TRACKER -->
-<div id="p-tracker" class="page">
-  <div class="card" style="text-align:center;padding:18px">
-    <div style="font-size:12px;color:var(--g400);margin-bottom:3px">Tasks completed today</div>
-    <div style="font-size:46px;font-weight:800;color:var(--green);line-height:1" id="done-count">0</div>
-    <div style="font-size:13px;color:var(--g600);margin-top:3px" id="done-msg">Tap items below to mark them done</div>
-    <div style="margin-top:11px"><div class="pb"><div class="pf fg" id="done-bar" style="width:0%;transition:width .4s"></div></div></div>
+<div id="p-tracker" class="pg">
+  <div class="card" style="text-align:center;padding:16px">
+    <div style="font-size:11px;color:var(--g4);margin-bottom:2px" id="tt">Tasks today</div>
+    <div style="font-size:44px;font-weight:800;color:var(--gr);line-height:1" id="dc">0</div>
+    <div style="font-size:12px;color:var(--g6);margin-top:3px" id="dm">Tap to mark done</div>
+    <div style="margin-top:10px"><div class="pb"><div class="pf fg" id="db" style="width:0%"></div></div></div>
   </div>
-  <div class="sh">🌅 Morning habits</div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Warm water or lemon water on waking</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Morning exercises completed (20–25 min)</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Shoulder blade squeezes done</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Healthy breakfast eaten (no fried food)</div></div>
-  <div class="sh">☀️ Afternoon habits</div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Mid-morning snack — fruit + nuts</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Lunch eaten — correct portions</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Evening snack — roasted, not fried</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Evening exercises and stretches done</div></div>
-  <div class="sh">🌙 Evening habits</div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Light dinner before 8 PM</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Shoulder massage with warm mustard oil</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">Turmeric milk before sleep</div></div>
-  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl">No fried or junk food today</div></div>
-  <div class="sh">💧 Water intake — tap each glass as you drink</div>
+  <div class="sh" id="tm">🌅 Morning habits</div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t1">Warm water on waking</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t2">Morning exercises done</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t3">Shoulder blade squeezes done</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t4">Healthy breakfast eaten</div></div>
+  <div class="sh" id="ta">☀️ Afternoon habits</div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t5">Mid-morning snack</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t6">Lunch — correct portions</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t7">Snack — roasted not fried</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t8">Evening exercises done</div></div>
+  <div class="sh" id="te">🌙 Evening habits</div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t9">Light dinner before 8 PM</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t10">Shoulder massage done</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t11">Turmeric milk before sleep</div></div>
+  <div class="ci" onclick="tog(this)"><div class="cc"><span class="ck">✓</span></div><div class="cl" id="t12">No fried/junk food today</div></div>
+  <div class="sh" id="tw">💧 Water glasses</div>
   <div class="wg" id="wg"></div>
-  <div style="font-size:11px;color:var(--g400);margin-top:7px;text-align:center">Target: 10 glasses (2.5 to 3 litres)</div>
-  <button class="btn btn-outline" onclick="resetT()" style="margin-top:18px">Reset for new day</button>
+  <div style="font-size:11px;color:var(--g4);margin-top:6px;text-align:center" id="wt">Target: 10 glasses</div>
+  <button class="btn btn-ol" onclick="resetT()" id="rb2">Reset for new day</button>
 </div>
 
-<!-- FOOD RULES -->
-<div id="p-rules" class="page">
+<div id="p-rules" class="pg">
   <div class="card">
-    <div class="ct"><div class="ico ir">🚫</div> Avoid completely</div>
-    <div class="av-item"><div class="avd dr">✕</div>Deep fried foods — puri, pakoda, samosa, bhatura</div>
-    <div class="av-item"><div class="avd dr">✕</div>Maida products — white bread, naan, biscuits, namkeen, cake</div>
-    <div class="av-item"><div class="avd dr">✕</div>Sweet drinks — cold drinks, packaged juices, sugary sharbat</div>
-    <div class="av-item"><div class="avd dr">✕</div>Fried papad, fried chips, fried snacks of any kind</div>
-    <div class="av-item"><div class="avd dr">✕</div>White rice at night</div>
-    <div class="av-item"><div class="avd dr">✕</div>Excess cream, malai, makkhan</div>
-    <div class="av-item"><div class="avd dr">✕</div>Alcohol — empty calories, worsens joint inflammation</div>
+    <div class="ct"><div class="ico ir">🚫</div><span id="av-t">Avoid Completely</span></div>
+    <div class="avit"><div class="avd dr">✕</div><span id="av1">Deep fried — puri, pakoda, samosa, bhatura</span></div>
+    <div class="avit"><div class="avd dr">✕</div><span id="av2">Maida — white bread, naan, biscuits, namkeen</span></div>
+    <div class="avit"><div class="avd dr">✕</div><span id="av3">Sweet drinks — cold drinks, packaged juice</span></div>
+    <div class="avit"><div class="avd dr">✕</div><span id="av4">Fried papad, chips, fried snacks</span></div>
+    <div class="avit"><div class="avd dr">✕</div><span id="av5">White rice at night</span></div>
+    <div class="avit"><div class="avd dr">✕</div><span id="av6">Excess cream, malai, makkhan</span></div>
+    <div class="avit"><div class="avd dr">✕</div><span id="av7">Alcohol</span></div>
   </div>
   <div class="card">
-    <div class="ct"><div class="ico ia">⚠️</div> Reduce — don't eliminate</div>
-    <div class="av-item"><div class="avd da">↓</div>Cooking oil — max 2 to 3 tsp total per day</div>
-    <div class="av-item"><div class="avd da">↓</div>Ghee — max 1/2 tsp once per day</div>
-    <div class="av-item"><div class="avd da">↓</div>Chai or coffee — max 2 cups, less sugar</div>
-    <div class="av-item"><div class="avd da">↓</div>Salt — switch to rock salt or sendha namak</div>
-    <div class="av-item"><div class="avd da">↓</div>Wheat roti — 2 to 3 per meal, alternate with jowar or bajra</div>
-    <div class="av-item"><div class="avd da">↓</div>Rice — 1 cup brown rice at lunch only, never at dinner</div>
+    <div class="ct"><div class="ico ia">⚠️</div><span id="rd-t">Reduce — Don't Stop</span></div>
+    <div class="avit"><div class="avd da">↓</div><span id="rd1">Oil — max 2–3 tsp per day</span></div>
+    <div class="avit"><div class="avd da">↓</div><span id="rd2">Ghee — max 1/2 tsp once</span></div>
+    <div class="avit"><div class="avd da">↓</div><span id="rd3">Tea/coffee — max 2 cups</span></div>
+    <div class="avit"><div class="avd da">↓</div><span id="rd4">Salt — use sendha namak</span></div>
+    <div class="avit"><div class="avd da">↓</div><span id="rd5">Rice — 1 cup brown at lunch only</span></div>
   </div>
   <div class="card">
-    <div class="ct"><div class="ico ig">🔄</div> Smart Indian food swaps</div>
-    <div class="swr"><div class="swf">White rice</div><div class="swa">→</div><div class="swt">Brown rice or millets</div></div>
-    <div class="swr"><div class="swf">Maida roti</div><div class="swa">→</div><div class="swt">Wheat / jowar / bajra roti</div></div>
-    <div class="swr"><div class="swf">Cream in gravy</div><div class="swa">→</div><div class="swt">Curd or thin coconut milk</div></div>
-    <div class="swr"><div class="swf">Lassi</div><div class="swa">→</div><div class="swt">Chaas / buttermilk</div></div>
-    <div class="swr"><div class="swf">White sugar</div><div class="swa">→</div><div class="swt">Small amount of jaggery</div></div>
-    <div class="swr"><div class="swf">Fried papad</div><div class="swa">→</div><div class="swt">Roasted papad</div></div>
-    <div class="swr"><div class="swf">Deep frying</div><div class="swa">→</div><div class="swt">Non-stick tawa, 1/2 tsp oil</div></div>
-    <div class="swr"><div class="swf">Fried snacks</div><div class="swa">→</div><div class="swt">Makhana, roasted chana, peanuts</div></div>
+    <div class="ct"><div class="ico ig">🔄</div><span id="sw-t">Smart Swaps</span></div>
+    <div class="swr"><div class="swf" id="sf1">White rice</div><div class="swa">→</div><div class="swt" id="st1">Brown rice/millets</div></div>
+    <div class="swr"><div class="swf" id="sf2">Maida roti</div><div class="swa">→</div><div class="swt" id="st2">Wheat/jowar/bajra</div></div>
+    <div class="swr"><div class="swf" id="sf3">Cream in gravy</div><div class="swa">→</div><div class="swt" id="st3">Curd/coconut milk</div></div>
+    <div class="swr"><div class="swf" id="sf4">Lassi</div><div class="swa">→</div><div class="swt" id="st4">Chaas/buttermilk</div></div>
+    <div class="swr"><div class="swf" id="sf5">Fried papad</div><div class="swa">→</div><div class="swt" id="st5">Roasted papad</div></div>
+    <div class="swr"><div class="swf" id="sf6">Deep frying</div><div class="swa">→</div><div class="swt" id="st6">Non-stick tawa, 1/2 tsp oil</div></div>
   </div>
 </div>
 
-<!-- TIPS -->
-<div id="p-tips" class="page">
-  <div class="card">
-    <div class="ct"><div class="ico ig">💪</div> Shoulder pain relief</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Warm mustard oil massage on both shoulders every night before sleep</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Use forearm/elbow crutches instead of underarm — far less shoulder damage long term</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Padded crutch handles — reduces hand and wrist strain significantly</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Sit upright in wheelchair — hunched posture puts extra load on shoulders</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Anti-inflammatory foods daily — turmeric, ginger, amla, walnuts, garlic</div>
+<div id="p-swap" class="pg">
+  <div class="apib" id="apibox">
+    <h3 id="ak-t">🔑 API Key for AI Features</h3>
+    <p id="ak-d">Enter your Anthropic API key to enable AI. Get free at <strong>console.anthropic.com</strong> → API Keys.</p>
+    <div class="akr"><input class="aki" type="password" id="aki" placeholder="sk-ant-..."><button class="akb" onclick="saveKey()" id="ak-s">Save</button></div>
+    <div id="aks" class="aks"></div>
   </div>
   <div class="card">
-    <div class="ct"><div class="ico ig">🌿</div> Anti-inflammation foods</div>
-    <div class="ai-item"><div class="ai-dot">•</div><strong>Turmeric (haldi)</strong> — add to dal, milk, sabzi every day</div>
-    <div class="ai-item"><div class="ai-dot">•</div><strong>Ginger (adrak)</strong> — ginger chai or grated into meals</div>
-    <div class="ai-item"><div class="ai-dot">•</div><strong>Amla</strong> — raw, juice, or murabba. Excellent for joints</div>
-    <div class="ai-item"><div class="ai-dot">•</div><strong>Walnuts</strong> — 4 daily, best nut for joint health</div>
-    <div class="ai-item"><div class="ai-dot">•</div><strong>Flaxseeds (alsi)</strong> — 1 tsp daily in curd or roti dough</div>
-    <div class="ai-item"><div class="ai-dot">•</div><strong>Garlic (lahsun)</strong> — 2 cloves raw or lightly cooked daily</div>
+    <div class="ct"><div class="ico ig">🔄</div><span id="sp-t">Swap Checker</span></div>
+    <p style="font-size:13px;color:var(--g6);margin-bottom:12px;line-height:1.5" id="sp-d">Tell me what plan says and what you want — I'll check if it suits your goals.</p>
+    <label class="lbl" id="sl1">Meal type</label>
+    <select class="sel" id="sw-meal-sel"></select>
+    <label class="lbl" id="sl2">Plan says (original)</label>
+    <input class="inp" id="sw-or" placeholder="e.g. brown rice and dal tadka" oninput="clrR()">
+    <label class="lbl" id="sl3">You want instead</label>
+    <input class="inp" id="sw-nw" placeholder="e.g. normal rice or palak sabji" oninput="clrR()">
+    <button class="gbtn" id="sw-btn" onclick="doSwap()">✓ Check this swap</button>
   </div>
-  <div class="card">
-    <div class="ct"><div class="ico ib">💧</div> Best drinks for you</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Jeera water — boil 1 tsp cumin in 2 glasses water, cool, drink every morning</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Chaas — after every lunch with jeera, green chilli, black salt</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Coconut water — natural electrolytes, good for joints</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Green or ginger tea — 1 to 2 cups daily without milk</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Turmeric milk (haldi doodh) — every night before bed</div>
+  <div class="card" style="padding:12px">
+    <div style="font-size:13px;font-weight:600;color:var(--g6);margin-bottom:7px" id="qe-t">⚡ Quick examples</div>
+    <div id="qchips"></div>
   </div>
-  <div class="card">
-    <div class="ct"><div class="ico ia">😴</div> Sleep and recovery</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Sleep 7 to 8 hours — poor sleep increases hunger hormones</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Turmeric milk every night — reduces joint inflammation while sleeping</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Pillow under left knee — reduces joint stress on your good leg overnight</div>
-    <div class="ai-item"><div class="ai-dot">•</div>Finish dinner at least 2 hours before sleeping</div>
-  </div>
-  <div class="ban b">🩺 Please show this plan to your doctor before starting. Your weight and health conditions will help fine-tune the calorie target.</div>
-</div>
-
-<!-- SWAP CHECKER -->
-<div id="p-swap" class="page">
-  <div class="card">
-    <div class="ct"><div class="ico ig">🔄</div> Meal swap checker</div>
-    <p style="font-size:13px;color:var(--g600);margin-bottom:13px;line-height:1.5">Tell me what the plan says and what you want instead — I'll check if it suits your health goals.</p>
-    <label class="lbl">Meal type</label>
-    <select class="sel" id="sw-meal"><option value="">— select —</option><option value="breakfast">Breakfast</option><option value="mid-morning snack">Mid-morning snack</option><option value="lunch">Lunch</option><option value="evening snack">Evening snack</option><option value="dinner">Dinner</option></select>
-    <label class="lbl">What the plan says (original)</label>
-    <input class="inp" id="sw-orig" placeholder="e.g. brown rice and dal tadka" oninput="clrR()">
-    <label class="lbl">What you want to eat instead</label>
-    <input class="inp" id="sw-new" placeholder="e.g. normal rice or palak sabji" oninput="clrR()">
-    <button class="gbtn" id="sw-btn" onclick="checkSwap()">Check if this swap is OK ✓</button>
-  </div>
-  <div class="card" style="padding:13px">
-    <div style="font-size:13px;font-weight:600;color:var(--g600);margin-bottom:8px">⚡ Quick examples — tap to try</div>
-    <div>
-      <span class="qchip" onclick="qfill('lunch','brown rice and dal tadka','plain white rice')">White rice instead of brown</span>
-      <span class="qchip" onclick="qfill('lunch','dal tadka','palak sabji')">Add palak sabji</span>
-      <span class="qchip" onclick="qfill('dinner','jowar roti','wheat roti')">Wheat roti instead of jowar</span>
-      <span class="qchip" onclick="qfill('breakfast','moong dal chilla','poha')">Poha instead of chilla</span>
-      <span class="qchip" onclick="qfill('lunch','brown rice','biryani')">Biryani at lunch</span>
-      <span class="qchip" onclick="qfill('evening snack','roasted chana','samosa')">Samosa as snack</span>
-      <span class="qchip" onclick="qfill('dinner','jowar roti','paratha with ghee')">Paratha with ghee</span>
-      <span class="qchip" onclick="qfill('lunch','curd','lassi')">Lassi instead of curd</span>
-    </div>
-  </div>
-  <div id="sw-result" class="rb"></div>
-  <div id="sw-hist-sec" style="display:none">
-    <div class="sh">📋 Recent checks</div>
-    <div id="sw-hist"></div>
-    <button class="btn btn-outline" onclick="clrHist()" style="font-size:13px;padding:9px">Clear history</button>
+  <div id="swr2" class="rb"></div>
+  <div id="sh-sec" style="display:none">
+    <div class="sh" id="sh-t">📋 Recent checks</div>
+    <div id="sh-list"></div>
+    <button class="btn btn-ol" onclick="clrH()" id="clh">Clear history</button>
   </div>
 </div>
 
-<!-- AI CHEF -->
-<div id="p-ai" class="page">
+<div id="p-ai" class="pg">
   <div class="card">
-    <div class="ct"><div class="ico ig">🤖</div> AI meal builder</div>
-    <p style="font-size:13px;color:var(--g600);line-height:1.5;margin-bottom:13px">Tell me what ingredients you have and I'll build the best healthy Indian meal for your goals — with recipe, nutrition, and tips.</p>
-    <label class="lbl">Which meal are you planning?</label>
-    <select class="sel" id="ai-meal"><option value="breakfast">Breakfast</option><option value="mid-morning snack">Mid-morning snack</option><option value="lunch" selected>Lunch</option><option value="evening snack">Evening snack</option><option value="dinner">Dinner</option></select>
-    <label class="lbl">Tap ingredients you have available</label>
-    <div class="cscroll" id="cscroll">
-      <button class="cbtn on" onclick="fcat('all',this)">All</button>
-      <button class="cbtn" onclick="fcat('grains',this)">🌾 Grains</button>
-      <button class="cbtn" onclick="fcat('dal',this)">🫘 Dal &amp; Protein</button>
-      <button class="cbtn" onclick="fcat('veg',this)">🥦 Vegetables</button>
-      <button class="cbtn" onclick="fcat('dairy',this)">🥛 Dairy</button>
-      <button class="cbtn" onclick="fcat('spice',this)">🌶️ Spices</button>
-      <button class="cbtn" onclick="fcat('fruit',this)">🍎 Fruits &amp; Nuts</button>
-    </div>
-    <div class="pgrid" id="pgrid"></div>
-    <div class="irow" style="margin-top:9px">
-      <input class="iinp" id="ii" placeholder="Type any other ingredient..." onkeydown="if(event.key==='Enter')addI()">
+    <div class="ct"><div class="ico ig">🤖</div><span id="ai-t">AI Meal Builder</span></div>
+    <p style="font-size:13px;color:var(--g6);line-height:1.5;margin-bottom:12px" id="ai-d">Tell me what you have — I'll build the best healthy Indian meal for your goals.</p>
+    <label class="lbl" id="al1">Which meal?</label>
+    <select class="sel" id="ai-meal-sel"></select>
+    <label class="lbl" id="al2">Tap ingredients you have</label>
+    <div class="csc" id="catsc"></div>
+    <div class="pgd" id="pgd"></div>
+    <div class="irow" style="margin-top:8px">
+      <input class="iinp" id="iinp" onkeydown="if(event.key==='Enter')addI()">
       <button class="iadd" onclick="addI()">+</button>
     </div>
-    <div id="itags" style="min-height:32px;margin-bottom:4px"></div>
-    <div class="icnt" id="icnt">0 ingredients added — tap above or type</div>
+    <div id="itags" style="min-height:30px;margin-bottom:3px"></div>
+    <div class="icnt" id="icnt">0 ingredients</div>
   </div>
   <div class="card">
-    <label class="lbl">Preferences (tap to select)</label>
-    <div style="margin-bottom:11px">
-      <button class="pfchip" onclick="togPf(this)" data-p="no onion no garlic">No onion/garlic</button>
-      <button class="pfchip" onclick="togPf(this)" data-p="very spicy">Extra spicy 🌶️</button>
-      <button class="pfchip" onclick="togPf(this)" data-p="mild spice">Mild spice</button>
-      <button class="pfchip" onclick="togPf(this)" data-p="quick under 15 minutes">Quick (under 15 min)</button>
-      <button class="pfchip" onclick="togPf(this)" data-p="high protein">High protein</button>
-      <button class="pfchip" onclick="togPf(this)" data-p="light and easy to digest">Light &amp; easy digest</button>
-      <button class="pfchip" onclick="togPf(this)" data-p="no cooking required">No cooking needed</button>
-    </div>
-    <label class="lbl">Anything extra to tell AI? (optional)</label>
-    <input class="iinp" id="ai-note" placeholder="e.g. feeling tired, want something warm..." style="width:100%;margin-bottom:11px">
+    <label class="lbl" id="apl">Preferences</label>
+    <div style="margin-bottom:10px" id="pref-div"></div>
+    <label class="lbl" id="anl">Extra note to AI?</label>
+    <input class="iinp" id="ai-note" style="width:100%;margin-bottom:10px">
     <button class="gbtn" id="ai-btn" onclick="buildMeal()">🍽️ Build my best meal</button>
   </div>
   <div id="ai-out"></div>
 </div>
 
-<!-- NAV -->
+<div id="p-tips" class="pg">
+  <div class="card">
+    <div class="ct"><div class="ico ig">💪</div><span id="tp1t">Shoulder Pain Relief</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp1-1">Warm mustard oil massage on both shoulders every night</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp1-2">Use elbow/forearm crutches — less shoulder damage</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp1-3">Padded crutch handles — reduces wrist strain</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp1-4">Sit upright in wheelchair — hunching hurts shoulders</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp1-5">Anti-inflammatory foods: turmeric, ginger, amla, walnuts</span></div>
+  </div>
+  <div class="card">
+    <div class="ct"><div class="ico ig">🌿</div><span id="tp2t">Anti-Inflammation Foods</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp2-1"><strong>Haldi</strong> — add to dal, milk, sabzi daily</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp2-2"><strong>Adrak</strong> — ginger chai or in food</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp2-3"><strong>Amla</strong> — raw, juice, or murabba</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp2-4"><strong>Walnuts</strong> — 4 daily, best for joints</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp2-5"><strong>Flaxseeds</strong> — 1 tsp daily in curd</span></div>
+  </div>
+  <div class="card">
+    <div class="ct"><div class="ico ib">💧</div><span id="tp3t">Best Drinks</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp3-1">Jeera water — boil 1 tsp cumin, drink every morning</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp3-2">Chaas after every lunch</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp3-3">Coconut water — good for joints</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp3-4">Green/ginger tea — 1–2 cups daily</span></div>
+    <div class="tip"><div class="tdot">•</div><span id="tp3-5">Haldi doodh — every night before bed</span></div>
+  </div>
+  <div class="ban b" id="doc">🩺 Show this plan to your doctor before starting.</div>
+</div>
+
 <nav class="bnav">
-  <button class="ni on" onclick="goP('home',this)">
-    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <span>Home</span>
-  </button>
-  <button class="ni" onclick="goP('diet',this)">
-    <svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
-    <span>Diet</span>
-  </button>
-  <button class="ni" onclick="goP('exercise',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-    <span>Exercise</span>
-  </button>
-  <button class="ni" onclick="goP('tracker',this)">
-    <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-    <span>Tracker</span>
-  </button>
-  <button class="ni" onclick="goP('rules',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-    <span>Rules</span>
-  </button>
-  <button class="ni" onclick="goP('swap',this)">
-    <svg viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
-    <span>Swap</span>
-  </button>
-  <button class="ni" onclick="goP('ai',this)">
-    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="12" y1="16" x2="12" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
-    <span>AI Chef</span>
-  </button>
-  <button class="ni" onclick="goP('tips',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span>Tips</span>
-  </button>
+  <button class="ni on" onclick="goP('home',this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span id="n1">Home</span></button>
+  <button class="ni" onclick="goP('diet',this)"><svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg><span id="n2">Diet</span></button>
+  <button class="ni" onclick="goP('exercise',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg><span id="n3">Exercise</span></button>
+  <button class="ni" onclick="goP('tracker',this)"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span id="n4">Tracker</span></button>
+  <button class="ni" onclick="goP('rules',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg><span id="n5">Rules</span></button>
+  <button class="ni" onclick="goP('swap',this)"><svg viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/></svg><span id="n6">Swap</span></button>
+  <button class="ni" onclick="goP('ai',this)"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="12" y1="16" x2="12.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg><span id="n7">AI Chef</span></button>
+  <button class="ni" onclick="goP('tips',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="n8">Tips</span></button>
 </nav>
-
 <div class="notif" id="notif"></div>
-
 <script>
-// ── CORE ──
-const DAYS=['sun','mon','tue','wed','thu','fri','sat'];
-const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
+// ═══════════════════════════════════════════
+// TRANSLATIONS
+// ═══════════════════════════════════════════
+const T = {
+en:{
+  hsub:'Personal diet & exercise tracker',
+  stk_l:'day streak — keep going! 💪',
+  s1l:'Calories',s1u:'kcal/day',s2l:'Water',s2u:'glasses/day',
+  s3l:'Exercise',s3u:'min/day',s4l:'Goal',s4u:'safe/month',
+  sch_t:"Today's Schedule",
+  sc1:'Warm lemon/jeera water',sc1n:'Kickstarts metabolism',
+  sc2:'Morning exercises — 20–25 min seated',sc3:'Breakfast',
+  sc4:'Mid-morning snack — fruit + nuts',sc5:'Lunch — main meal',
+  sc6:'Evening snack + shoulder stretches',sc7:'Dinner — light & early',
+  sc8:'Turmeric milk',sc8n:'Reduces joint inflammation',
+  nut_t:'Nutrition Targets',np1:'Protein 25–30%',np2:'Carbs 40–45%',np3:'Fats 25–30%',
+  mil_t:'Milestones',
+  m1t:'Wk 1–2',m1:'Feel lighter, better energy, less bloating',
+  m2t:'Month 1',m2:'1–2 kg loss, more energy on crutches',
+  m3t:'Month 3',m3:'Less shoulder pain, easier mobility',
+  m4t:'Month 6',m4:'6–8 kg loss, walking much easier',
+  days:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+  meals:['🌅 Breakfast','☀️ Mid-morning','🍽️ Lunch','🫖 Snack','🌙 Dinner'],
+  wn:'💧 Drink water before every meal. Target: 3 litres daily.',
+  exw:'⚠️ All exercises seated/lying. No standing needed. Stop if sharp pain.',
+  exm:'🌅 Morning — 20–25 minutes',exe:'🌙 Evening — 10–15 minutes',
+  e1n:'Seated deep breathing',e1d:'Breathe in 4 counts, hold 2, out 6. Activates core, reduces shoulder tension.',e1b:'5 min',
+  e2n:'Seated arm circles',e2d:'15 forward, 15 backward. Warms shoulder joints gently.',e2b:'3 min',
+  e3n:'Shoulder blade squeezes ⭐',e3d:'Squeeze together 5 sec, release. 15 times. DO DAILY — builds crutch-support muscles.',e3b:'3 min — MOST IMPORTANT',
+  e4n:'Neck stretches',e4d:'Tilt side to side, hold 10 sec each. Releases crutch tension.',e4b:'2 min',
+  e5n:'Torso twists',e5d:'Hands on shoulders, twist left-right slowly. 20 reps. Burns calories.',e5b:'3 min',
+  e6n:'Seated forward punches 🔥',e6d:'Alternating punches. 3 sets of 30. Your cardio — best fat burner.',e6b:'5 min — BEST FAT BURNER',
+  e7n:'Wheelchair push intervals',e7d:'30 sec fast, 30 sec rest, 5 times.',e7b:'5 min',
+  e8n:'Resistance band pulls',e8d:'Pull apart, hold 3 sec, release. 3×12. Builds muscles for crutches.',e8b:'5 min',
+  e9n:'Lying leg raises',e9d:'Left leg 10–15 times. Right with hands. Improves circulation.',e9b:'3 min',
+  e10n:'Shoulder self-massage',e10d:'Warm mustard oil. Press and rub shoulders. Rotate both wrists.',e10b:'5 min — every night',
+  ext:'📈 Week 1: just 15 min total. Add 5 min every 2 weeks.',
+  tt:'Tasks today',dm:'Tap items below to mark done',
+  tm:'🌅 Morning habits',ta:'☀️ Afternoon habits',te:'🌙 Evening habits',tw:'💧 Water glasses',
+  t1:'Warm water or lemon water on waking',t2:'Morning exercises (20–25 min)',
+  t3:'Shoulder blade squeezes done',t4:'Healthy breakfast (no fried food)',
+  t5:'Mid-morning snack — fruit + nuts',t6:'Lunch — correct portions',
+  t7:'Evening snack — roasted not fried',t8:'Evening exercises done',
+  t9:'Light dinner before 8 PM',t10:'Shoulder massage with warm oil',
+  t11:'Turmeric milk before sleep',t12:'No fried/junk food today',
+  wt:'Target: 10 glasses (2.5–3 litres)',rb2:'Reset for new day',
+  av_t:'Avoid Completely',rd_t:'Reduce — Don\'t Stop',sw_t:'Smart Swaps',
+  av1:'Deep fried — puri, pakoda, samosa, bhatura',av2:'Maida — white bread, naan, biscuits, cake',
+  av3:'Sweet drinks — cold drinks, packaged juice',av4:'Fried papad, chips, fried snacks',
+  av5:'White rice at night',av6:'Excess cream, malai, makkhan',av7:'Alcohol',
+  rd1:'Oil — max 2–3 tsp/day',rd2:'Ghee — max ½ tsp once/day',
+  rd3:'Tea/coffee — max 2 cups',rd4:'Salt — use sendha namak',rd5:'Rice — 1 cup brown at lunch only',
+  sf1:'White rice',st1:'Brown rice/millets',sf2:'Maida roti',st2:'Wheat/jowar/bajra',
+  sf3:'Cream in gravy',st3:'Curd/coconut milk',sf4:'Lassi',st4:'Chaas/buttermilk',
+  sf5:'Fried papad',st5:'Roasted papad',sf6:'Deep frying',st6:'Non-stick tawa, ½ tsp oil',
+  ak_t:'🔑 API Key for AI Features',
+  ak_d:'Enter your Anthropic API key to use AI features. Get free at console.anthropic.com → API Keys.',
+  ak_s:'Save Key',ak_ok:'✅ Key saved! AI features are now active.',ak_no:'❌ Please enter a valid key (sk-ant-...)',
+  sp_t:'Swap Checker',sp_d:'Tell me what the plan says and what you want — I\'ll check if it suits your goals.',
+  sl1:'Meal type',sl2:'Plan says (original)',sl3:'You want instead',
+  sw_btn:'✓ Check this swap',sw_chk:'⏳ Checking...',sw_err:'Please fill all fields',
+  sw_con:'⚠️ Could not connect. Please check your API key is saved.',
+  qe_t:'⚡ Quick examples',sh_t:'📋 Recent checks',clh:'Clear history',
+  qchips:[
+    {l:'White rice instead of brown',m:'lunch',o:'brown rice',n:'white rice'},
+    {l:'Add palak sabji',m:'lunch',o:'dal tadka',n:'palak sabji'},
+    {l:'Poha instead of chilla',m:'breakfast',o:'moong dal chilla',n:'poha'},
+    {l:'Biryani at lunch',m:'lunch',o:'brown rice',n:'biryani'},
+    {l:'Samosa as snack',m:'evening snack',o:'roasted chana',n:'samosa'},
+    {l:'Wheat instead of jowar roti',m:'dinner',o:'jowar roti',n:'wheat roti'},
+  ],
+  meal_opts:['Breakfast','Mid-morning snack','Lunch','Evening snack','Dinner'],
+  ai_t:'AI Meal Builder',ai_d:'Tell me what ingredients you have — I\'ll build the best healthy Indian meal for your goals.',
+  al1:'Which meal?',al2:'Tap ingredients you have',
+  iph:'Type any other ingredient...',icnt_e:'0 ingredients — tap above or type',
+  apl:'Preferences',anl:'Extra note to AI?',anph:'e.g. feeling tired, want something warm...',
+  ai_btn:'🍽️ Build my best meal',ai_cook:'⏳ AI is cooking...',ai_thk:'Building your perfect meal...',
+  ai_thk2:'Checking ingredients & your health goals',ai_con:'⚠️ Could not connect. Check your API key.',
+  ai_2:'Add at least 2 ingredients first',
+  prefs:['No onion/garlic','Extra spicy 🌶️','Mild spice','Quick (<15 min)','High protein','Light & easy','No cooking'],
+  pref_v:['no onion no garlic','very spicy','mild','quick under 15 min','high protein','light easy digest','no cooking'],
+  cat_all:'All',cats:['🌾 Grains','🫘 Dal & Protein','🥦 Vegetables','🥛 Dairy','🌶️ Spices','🍎 Fruits & Nuts'],
+  cat_k:['all','grains','dal','veg','dairy','spice','fruit'],
+  ing_c:' ingredient(s) added',
+  ih:'Ingredients used',hm:'How to make',ptips:'💡 Pro tips',wg:'✅ Why great for you',nt:'Next time:',om:'💡 Other meals you could make',
+  kcal:'kcal',prot:'protein',fib:'fibre',fat:'fat',hs:'health score',
+  tp1t:'Shoulder Pain Relief',tp2t:'Anti-Inflammation Foods',tp3t:'Best Drinks',
+  tp1_1:'Warm mustard oil massage every night before sleep',
+  tp1_2:'Use elbow/forearm crutches instead of underarm',
+  tp1_3:'Padded crutch handles reduce wrist strain',
+  tp1_4:'Sit upright in wheelchair — hunching loads shoulders',
+  tp1_5:'Anti-inflammatory foods daily: turmeric, ginger, amla, walnuts',
+  tp2_1:'<b>Haldi</b> — add to dal, milk, sabzi every day',
+  tp2_2:'<b>Adrak</b> — ginger chai or grated in meals',
+  tp2_3:'<b>Amla</b> — raw, juice or murabba. Best for joints',
+  tp2_4:'<b>Walnuts</b> — 4 daily, best nut for joint health',
+  tp2_5:'<b>Flaxseeds</b> — 1 tsp daily in curd or roti',
+  tp3_1:'Jeera water — boil 1 tsp cumin, drink every morning',
+  tp3_2:'Chaas after every lunch with jeera and black salt',
+  tp3_3:'Coconut water — natural electrolytes, good for joints',
+  tp3_4:'Green/ginger tea — 1–2 cups daily without milk',
+  tp3_5:'Haldi doodh — every night before bed',
+  n1:'Home',n2:'Diet',n3:'Exercise',n4:'Tracker',n5:'Rules',n6:'Swap',n7:'AI Chef',n8:'Tips',
+  doc:'🩺 Show this plan to your doctor before starting.',
+  dmsgs:['Tap items below to mark done','Great start — keep going!','Halfway there!','Almost perfect!','Perfect day! 🎉'],
+  w_done:'Water goal achieved! 💧',stk_toast:'Day {n} streak! 🔥',
+  rst_c:'Reset all tasks for a new day?',clh_c:'Clear swap history?',
+  diet:{
+    mon:{b:'2 moong dal chilla + green chutney + low-sugar masala chai',bn:'Non-stick tawa, ½ tsp oil. High protein.',mm:'1 banana + 5 almonds',l:'Brown rice + dal tadka (jeera, hing, green chilli) + cucumber salad + curd',sn:'Roasted chana + chaas with jeera & black salt',d:'2 jowar/bajra rotis + palak sabzi + dal',dn:'No rice at night'},
+    tue:{b:'Poha (mustard seeds, curry leaves, chilli, peas, onion) + curd + lemon',mm:'1 guava or orange + 4 walnuts',l:'2 wheat rotis + rajma curry (less oil) + salad + curd',sn:'Roasted makhana with chilli & pepper',d:'Moong dal khichdi (light ghee, turmeric) + veg soup'},
+    wed:{b:'Besan or egg omelette (chilli, coriander, onion) + 1 multigrain toast',mm:'Coconut water or nimbu pani (no sugar)',l:'2 rotis + dry chana masala + jeera raita + salad',sn:'Sprouts chaat — moong, onion, tomato, chaat masala, lemon',d:'Vegetable dalia + dal + curd'},
+    thu:{b:'2–3 idli + light sambar + green chutney',bn:'Fermented food — great for gut health',mm:'1 apple + 5 almonds',l:'Brown rice + mixed veg sabzi (dry) + sambhar + curd',sn:'Green tea + handful roasted peanuts',d:'2 jowar rotis + lauki sabzi + moong dal'},
+    fri:{b:'Upma (sooji, vegs, mustard, curry leaves, green chilli) + coconut chutney',mm:'Nimbu sharbat (no sugar, sendha namak) + 4 almonds',l:'2 rotis + chicken curry (skinless, less oil) OR dry paneer bhurji + salad + curd',sn:'Chaas + boiled corn chaat with chilli & lemon',d:'Khichdi + veg soup + curd'},
+    sat:{b:'2 besan chilla + mint chutney + low-sugar chai',mm:'1 bowl papaya or watermelon',l:'Dry chole (less oil) + brown rice or 2 rotis + salad + raita',sn:'Roasted makhana + green tea or chaas',d:'2 rotis + palak/methi sabzi + dal + curd'},
+    sun:{b:'Oats porridge (low-fat milk) + flax/chia seeds + 1 tsp honey',mm:'1 orange or sweet lime + 4 walnuts',l:'Dal khichdi (light ghee) + roasted papad + curd + chutney',sn:'Chaas + sprouts chaat',d:'Chunky veg soup + 2 small rotis + light sabzi'}
+  }
+},
+hi:{
+  hsub:'व्यक्तिगत आहार और व्यायाम ट्रैकर',
+  stk_l:'दिन की स्ट्रीक — जारी रखो! 💪',
+  s1l:'कैलोरी',s1u:'kcal/दिन',s2l:'पानी',s2u:'गिलास/दिन',
+  s3l:'व्यायाम',s3u:'मिनट/दिन',s4l:'लक्ष्य',s4u:'सुरक्षित/माह',
+  sch_t:'आज का कार्यक्रम',
+  sc1:'गर्म नींबू/जीरा पानी',sc1n:'चयापचय को तेज करता है',
+  sc2:'सुबह का व्यायाम — 20–25 मिनट बैठकर',sc3:'नाश्ता',
+  sc4:'मध्य-सुबह — फल + मेवे',sc5:'दोपहर का खाना — मुख्य भोजन',
+  sc6:'शाम नाश्ता + कंधे की स्ट्रेच',sc7:'रात का खाना — हल्का और जल्दी',
+  sc8:'हल्दी वाला दूध',sc8n:'जोड़ों की सूजन कम करता है',
+  nut_t:'पोषण लक्ष्य',np1:'प्रोटीन 25–30%',np2:'कार्बोहाइड्रेट 40–45%',np3:'वसा 25–30%',
+  mil_t:'मील के पत्थर',
+  m1t:'सप्ताह 1–2',m1:'हल्का महसूस होना, बेहतर ऊर्जा',
+  m2t:'माह 1',m2:'1–2 किलो कम, बैसाखी पर अधिक ऊर्जा',
+  m3t:'माह 3',m3:'कंधे का दर्द कम, आसान चाल',
+  m4t:'माह 6',m4:'6–8 किलो कम, चलना बहुत आसान',
+  days:['सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार','रविवार'],
+  meals:['🌅 नाश्ता','☀️ मध्य-सुबह','🍽️ दोपहर','🫖 स्नैक','🌙 रात'],
+  wn:'💧 हर भोजन से पहले पानी पियें। लक्ष्य: 3 लीटर रोज।',
+  exw:'⚠️ सभी व्यायाम बैठकर/लेटकर। खड़े होने की जरूरत नहीं। तेज दर्द हो तो रुकें।',
+  exm:'🌅 सुबह — 20–25 मिनट',exe:'🌙 शाम — 10–15 मिनट',
+  e1n:'बैठकर गहरी सांस',e1d:'4 गिनती में सांस लें, 2 रोकें, 6 में छोड़ें। कोर सक्रिय करता है।',e1b:'5 मिनट',
+  e2n:'हाथों के गोले',e2d:'15 आगे, 15 पीछे। कंधे के जोड़ों को गर्म करता है।',e2b:'3 मिनट',
+  e3n:'कंधे की मांसपेशियां दबाएं ⭐',e3d:'5 सेकंड दबाएं, छोड़ें। 15 बार। रोज करें — बैसाखी के लिए सबसे जरूरी।',e3b:'3 मिनट — सबसे जरूरी',
+  e4n:'गर्दन की स्ट्रेच',e4d:'दोनों तरफ झुकाएं, 10 सेकंड रोकें। बैसाखी का तनाव दूर करता है।',e4b:'2 मिनट',
+  e5n:'धड़ मोड़ना',e5d:'कंधों पर हाथ, बाएं-दाएं मुड़ें। 20 बार। कैलोरी जलाता है।',e5b:'3 मिनट',
+  e6n:'बैठकर मुक्केबाजी 🔥',e6d:'बारी-बारी मुक्के मारें। 3×30। सबसे अच्छा कार्डियो।',e6b:'5 मिनट — सबसे अच्छा',
+  e7n:'व्हीलचेयर पुश',e7d:'30 सेकंड तेज, 30 सेकंड आराम, 5 बार।',e7b:'5 मिनट',
+  e8n:'रेजिस्टेंस बैंड खींचना',e8d:'खींचें, 3 सेकंड रोकें, छोड़ें। 3×12।',e8b:'5 मिनट',
+  e9n:'लेटकर पैर उठाना',e9d:'बाएं पैर 10–15 बार। दाएं पैर हाथों से।',e9b:'3 मिनट',
+  e10n:'कंधे की मालिश',e10d:'गर्म सरसों का तेल। दबाएं और रगड़ें। कलाई घुमाएं।',e10b:'5 मिनट — रोज रात',
+  ext:'📈 सप्ताह 1: केवल 15 मिनट। हर 2 सप्ताह में 5 मिनट जोड़ें।',
+  tt:'आज के काम',dm:'नीचे दिए काम पर क्लिक करें',
+  tm:'🌅 सुबह की आदतें',ta:'☀️ दोपहर की आदतें',te:'🌙 शाम की आदतें',tw:'💧 पानी पिया',
+  t1:'उठते ही गर्म पानी',t2:'सुबह का व्यायाम (20–25 मिनट)',
+  t3:'कंधे की मांसपेशियों का व्यायाम',t4:'स्वस्थ नाश्ता (तला नहीं)',
+  t5:'मध्य-सुबह का नाश्ता',t6:'दोपहर का खाना — सही मात्रा',
+  t7:'शाम नाश्ता — भुना, तला नहीं',t8:'शाम का व्यायाम',
+  t9:'रात 8 बजे से पहले हल्का खाना',t10:'गर्म तेल से कंधे की मालिश',
+  t11:'सोने से पहले हल्दी दूध',t12:'आज कोई तला/जंक फूड नहीं',
+  wt:'लक्ष्य: 10 गिलास (2.5–3 लीटर)',rb2:'नए दिन के लिए रीसेट करें',
+  av_t:'पूरी तरह से बचें',rd_t:'कम करें — बंद न करें',sw_t:'स्मार्ट स्वैप',
+  av1:'तले हुए — पूरी, पकोड़ा, समोसा, भटूरा',av2:'मैदा — सफेद ब्रेड, नान, बिस्कुट, केक',
+  av3:'मीठे पेय — कोल्ड ड्रिंक, पैकेज्ड जूस',av4:'तले पापड़, चिप्स, तले स्नैक्स',
+  av5:'रात में सफेद चावल',av6:'अधिक क्रीम, मलाई, मक्खन',av7:'शराब',
+  rd1:'तेल — अधिकतम 2–3 चम्मच/दिन',rd2:'घी — अधिकतम ½ चम्मच',
+  rd3:'चाय/कॉफी — अधिकतम 2 कप',rd4:'नमक — सेंधा नमक उपयोग करें',rd5:'चावल — केवल दोपहर में 1 कप ब्राउन',
+  sf1:'सफेद चावल',st1:'ब्राउन चावल/बाजरा',sf2:'मैदा रोटी',st2:'गेहूं/ज्वार/बाजरा',
+  sf3:'ग्रेवी में क्रीम',st3:'दही/नारियल दूध',sf4:'लस्सी',st4:'छाछ',
+  sf5:'तला पापड़',st5:'भुना पापड़',sf6:'गहरा तलना',st6:'नॉन-स्टिक, ½ चम्मच तेल',
+  ak_t:'🔑 AI के लिए API Key चाहिए',
+  ak_d:'AI फीचर के लिए Anthropic API Key डालें। console.anthropic.com पर मुफ्त में मिलती है।',
+  ak_s:'Key सेव करें',ak_ok:'✅ Key सेव! AI फीचर चालू हैं।',ak_no:'❌ कृपया sk-ant- से शुरू होने वाली key डालें',
+  sp_t:'स्वैप चेकर',sp_d:'बताएं योजना में क्या है और आप क्या खाना चाहते हैं।',
+  sl1:'भोजन का प्रकार',sl2:'योजना में क्या है',sl3:'आप क्या खाना चाहते हैं',
+  sw_btn:'✓ जांचें',sw_chk:'⏳ जांच रहे हैं...',sw_err:'कृपया सभी फील्ड भरें',
+  sw_con:'⚠️ कनेक्ट नहीं हो सका। API Key जांचें।',
+  qe_t:'⚡ जल्दी उदाहरण',sh_t:'📋 हाल की जांच',clh:'इतिहास साफ करें',
+  qchips:[
+    {l:'ब्राउन की जगह सफेद चावल',m:'lunch',o:'brown rice',n:'white rice'},
+    {l:'पालक सब्जी जोड़ें',m:'lunch',o:'dal tadka',n:'palak sabji'},
+    {l:'चिल्ले की जगह पोहा',m:'breakfast',o:'moong dal chilla',n:'poha'},
+    {l:'दोपहर में बिरयानी',m:'lunch',o:'brown rice',n:'biryani'},
+    {l:'समोसा स्नैक में',m:'evening snack',o:'roasted chana',n:'samosa'},
+    {l:'ज्वार की जगह गेहूं रोटी',m:'dinner',o:'jowar roti',n:'wheat roti'},
+  ],
+  meal_opts:['नाश्ता','मध्य-सुबह','दोपहर का खाना','शाम का नाश्ता','रात का खाना'],
+  ai_t:'AI मील बिल्डर',ai_d:'बताएं आपके पास क्या है — मैं आपके लिए सबसे अच्छा भारतीय भोजन बनाऊंगा।',
+  al1:'कौन सा भोजन?',al2:'उपलब्ध सामग्री चुनें',
+  iph:'कोई और सामग्री टाइप करें...',icnt_e:'0 सामग्री — ऊपर से चुनें या टाइप करें',
+  apl:'प्राथमिकताएं',anl:'AI को कुछ और बताना है?',anph:'जैसे थका हुआ हूं, कुछ गर्म चाहिए...',
+  ai_btn:'🍽️ सबसे अच्छा भोजन बनाएं',ai_cook:'⏳ AI खाना बना रहा है...',ai_thk:'परफेक्ट भोजन तैयार हो रहा है...',
+  ai_thk2:'सामग्री और स्वास्थ्य लक्ष्य जांच रहे हैं',ai_con:'⚠️ कनेक्ट नहीं हो सका। API Key जांचें।',
+  ai_2:'कम से कम 2 सामग्री जोड़ें',
+  prefs:['बिना प्याज/लहसुन','बहुत तीखा 🌶️','कम तीखा','जल्दी (<15 मिनट)','उच्च प्रोटीन','हल्का पचाने में','बिना पकाए'],
+  pref_v:['no onion no garlic','very spicy','mild','quick under 15 min','high protein','light easy digest','no cooking'],
+  cat_all:'सभी',cats:['🌾 अनाज','🫘 दाल','🥦 सब्जियां','🥛 डेयरी','🌶️ मसाले','🍎 फल/मेवे'],
+  cat_k:['all','grains','dal','veg','dairy','spice','fruit'],
+  ing_c:' सामग्री जोड़ी',
+  ih:'सामग्री',hm:'कैसे बनाएं',ptips:'💡 टिप्स',wg:'✅ क्यों अच्छा है',nt:'अगली बार:',om:'💡 इन्हीं से और भोजन',
+  kcal:'kcal',prot:'प्रोटीन',fib:'फाइबर',fat:'वसा',hs:'स्वास्थ्य स्कोर',
+  tp1t:'कंधे के दर्द से राहत',tp2t:'सूजन-रोधी खाद्य पदार्थ',tp3t:'सबसे अच्छे पेय',
+  tp1_1:'रोज रात सोने से पहले गर्म सरसों के तेल से कंधे की मालिश',
+  tp1_2:'अंडरआर्म की जगह एल्बो क्रचेज़ उपयोग करें',
+  tp1_3:'गद्देदार क्रच हैंडल — हाथ और कलाई का तनाव कम',
+  tp1_4:'व्हीलचेयर में सीधे बैठें — झुकने से कंधों पर भार',
+  tp1_5:'रोज सूजन-रोधी खाना: हल्दी, अदरक, आंवला, अखरोट',
+  tp2_1:'<b>हल्दी</b> — दाल, दूध, सब्जी में हर दिन',
+  tp2_2:'<b>अदरक</b> — अदरक की चाय या खाने में',
+  tp2_3:'<b>आंवला</b> — कच्चा, जूस, या मुरब्बा',
+  tp2_4:'<b>अखरोट</b> — रोज 4, जोड़ों के लिए सबसे अच्छा',
+  tp2_5:'<b>अलसी</b> — 1 चम्मच दही में या रोटी के आटे में',
+  tp3_1:'जीरा पानी — हर सुबह',tp3_2:'छाछ — हर दोपहर बाद',
+  tp3_3:'नारियल पानी — जोड़ों के लिए',tp3_4:'ग्रीन/अदरक चाय — 1–2 कप रोज',
+  tp3_5:'हल्दी दूध — हर रात',
+  n1:'होम',n2:'आहार',n3:'व्यायाम',n4:'ट्रैकर',n5:'नियम',n6:'स्वैप',n7:'AI Chef',n8:'सुझाव',
+  doc:'🩺 शुरू करने से पहले इसे डॉक्टर को दिखाएं।',
+  dmsgs:['नीचे दिए काम पर क्लिक करें','अच्छी शुरुआत!','आधा हो गया!','लगभग परफेक्ट!','परफेक्ट दिन! 🎉'],
+  w_done:'पानी का लक्ष्य पूरा! 💧',stk_toast:'दिन {n} की स्ट्रीक! 🔥',
+  rst_c:'नए दिन के लिए रीसेट करें?',clh_c:'स्वैप इतिहास साफ करें?',
+  diet:{
+    mon:{b:'2 मूंग दाल चिल्ला + हरी चटनी + कम चीनी मसाला चाय',bn:'नॉन-स्टिक तवा, ½ चम्मच तेल।',mm:'1 केला + 5 बादाम',l:'ब्राउन चावल + दाल तड़का (जीरा, हींग, हरी मिर्च) + खीरा-प्याज सलाद + दही',sn:'भुना चना + जीरा-काले नमक वाली छाछ',d:'2 ज्वार/बाजरे की रोटी + पालक सब्जी + दाल',dn:'रात में चावल नहीं'},
+    tue:{b:'पोहा (राई, करी पत्ता, हरी मिर्च, मटर, प्याज) + दही + नींबू',mm:'1 अमरूद या संतरा + 4 अखरोट',l:'2 गेहूं की रोटी + राजमा करी (कम तेल) + सलाद + दही',sn:'भुना मखाना मिर्च और काली मिर्च के साथ',d:'मूंग दाल खिचड़ी (थोड़ा घी, हल्दी) + सब्जी सूप'},
+    wed:{b:'बेसन या अंडे का आमलेट (मिर्च, धनिया, प्याज) + 1 मल्टीग्रेन टोस्ट',mm:'नारियल पानी या नींबू पानी (बिना चीनी)',l:'2 रोटी + सूखा छोले मसाला + जीरा रायता + सलाद',sn:'अंकुरित मूंग चाट — मूंग, प्याज, टमाटर, चाट मसाला, नींबू',d:'सब्जी दलिया + दाल + दही'},
+    thu:{b:'2–3 इडली + हल्का सांभर + हरी चटनी',bn:'फर्मेंटेड खाना — आंत के लिए अच्छा',mm:'1 सेब + 5 बादाम',l:'ब्राउन चावल + मिश्रित सब्जी (सूखी) + सांभर + दही',sn:'ग्रीन टी + भुनी मूंगफली',d:'2 ज्वार रोटी + लौकी सब्जी + मूंग दाल'},
+    fri:{b:'उपमा (सूजी, सब्जियां, राई, करी पत्ता, हरी मिर्च) + नारियल चटनी',mm:'नींबू शरबत (बिना चीनी, सेंधा नमक) + 4 बादाम',l:'2 रोटी + चिकन करी (बिना खाल, कम तेल) या पनीर भुर्जी + सलाद + दही',sn:'छाछ + उबली मकई चाट',d:'खिचड़ी + सब्जी सूप + दही'},
+    sat:{b:'2 बेसन चिल्ला + पुदीना चटनी + कम चीनी चाय',mm:'1 कटोरी पपीता या तरबूज',l:'सूखे छोले (कम तेल) + ब्राउन चावल या 2 रोटी + सलाद + रायता',sn:'भुना मखाना + ग्रीन टी या छाछ',d:'2 रोटी + पालक/मेथी सब्जी + दाल + दही'},
+    sun:{b:'ओट्स दलिया (कम फैट दूध) + अलसी/चिया बीज + 1 चम्मच शहद',mm:'1 संतरा या मौसमी + 4 अखरोट',l:'दाल खिचड़ी (थोड़ा घी) + भुना पापड़ + दही + हरी चटनी',sn:'छाछ + अंकुरित चाट',d:'सब्जी सूप + 2 छोटी रोटी + हल्की सब्जी'}
+  }
+},
+mr:{
+  hsub:'वैयक्तिक आहार आणि व्यायाम ट्रॅकर',
+  stk_l:'दिवसांची स्ट्रीक — सुरू ठेवा! 💪',
+  s1l:'कॅलरी',s1u:'kcal/दिवस',s2l:'पाणी',s2u:'ग्लास/दिवस',
+  s3l:'व्यायाम',s3u:'मिनिटे/दिवस',s4l:'उद्दिष्ट',s4u:'सुरक्षित/महिना',
+  sch_t:'आजचे वेळापत्रक',
+  sc1:'कोमट लिंबूपाणी/जिरे पाणी',sc1n:'चयापचय सुधारते',
+  sc2:'सकाळचा व्यायाम — 20–25 मिनिटे बसून',sc3:'नाश्ता',
+  sc4:'मध्य-सकाळ — फळे + सुकामेवा',sc5:'दुपारचे जेवण — मुख्य जेवण',
+  sc6:'संध्याकाळचा नाश्ता + खांद्याचा व्यायाम',sc7:'रात्रीचे जेवण — हलके आणि लवकर',
+  sc8:'हळदीचे दूध',sc8n:'सांध्यांची सूज कमी करते',
+  nut_t:'पोषण उद्दिष्टे',np1:'प्रथिने 25–30%',np2:'कार्बोहायड्रेट 40–45%',np3:'चरबी 25–30%',
+  mil_t:'टप्पे',
+  m1t:'आठवडा 1–2',m1:'हलके वाटणे, अधिक ऊर्जा',
+  m2t:'महिना 1',m2:'1–2 किलो कमी, अधिक ऊर्जा',
+  m3t:'महिना 3',m3:'खांद्याचे दुखणे कमी',
+  m4t:'महिना 6',m4:'6–8 किलो कमी, चालणे सोपे',
+  days:['सोमवार','मंगळवार','बुधवार','गुरुवार','शुक्रवार','शनिवार','रविवार'],
+  meals:['🌅 नाश्ता','☀️ मध्य-सकाळ','🍽️ दुपार','🫖 स्नॅक','🌙 रात्र'],
+  wn:'💧 प्रत्येक जेवणापूर्वी पाणी प्या. उद्दिष्ट: 3 लीटर रोज.',
+  exw:'⚠️ सर्व व्यायाम बसून/झोपून. उभे राहण्याची गरज नाही. तीव्र वेदना होत असल्यास थांबा.',
+  exm:'🌅 सकाळ — 20–25 मिनिटे',exe:'🌙 संध्याकाळ — 10–15 मिनिटे',
+  e1n:'बसून खोल श्वास',e1d:'4 मोजत श्वास, 2 रोखा, 6 मोजत सोडा. कोर सक्रिय होतो.',e1b:'5 मिनिटे',
+  e2n:'हात गोल फिरवणे',e2d:'15 पुढे, 15 मागे. खांद्याचे सांधे उबदार होतात.',e2b:'3 मिनिटे',
+  e3n:'खांद्याचे स्नायू आकुंचन ⭐',e3d:'5 सेकंद धरा, सोडा. 15 वेळा. रोज करा — कुबडीसाठी सर्वात महत्त्वाचे.',e3b:'3 मिनिटे — सर्वात महत्त्वाचे',
+  e4n:'मान ताणने',e4d:'दोन्ही बाजूंनी झुकवा, 10 सेकंद. कुबडीचा ताण दूर करते.',e4b:'2 मिनिटे',
+  e5n:'धड वळवणे',e5d:'खांद्यांवर हात, डावीकडे-उजवीकडे वळा. 20 वेळा.',e5b:'3 मिनिटे',
+  e6n:'बसून ठोसे मारणे 🔥',e6d:'आळीपाळीने ठोसे. 3×30. सर्वोत्तम कार्डिओ.',e6b:'5 मिनिटे — सर्वोत्तम',
+  e7n:'व्हीलचेअर पुश',e7d:'30 सेकंद वेगाने, 30 सेकंद आराम, 5 वेळा.',e7b:'5 मिनिटे',
+  e8n:'रेझिस्टन्स बँड',e8d:'ओढा, 3 सेकंद धरा, सोडा. 3×12.',e8b:'5 मिनिटे',
+  e9n:'झोपून पाय उचलणे',e9d:'डावा पाय 10–15 वेळा. उजवा हातांनी.',e9b:'3 मिनिटे',
+  e10n:'खांद्याची मालिश',e10d:'कोमट मोहरीचे तेल. दाबा आणि रगडा. मनगटे गोल फिरवा.',e10b:'5 मिनिटे — रोज रात्री',
+  ext:'📈 आठवडा 1: फक्त 15 मिनिटे. दर 2 आठवड्यांनी 5 मिनिटे वाढवा.',
+  tt:'आजची कामे',dm:'खाली दिलेल्या कामावर टॅप करा',
+  tm:'🌅 सकाळच्या सवयी',ta:'☀️ दुपारच्या सवयी',te:'🌙 संध्याकाळच्या सवयी',tw:'💧 पाणी प्यालो',
+  t1:'उठल्यावर कोमट पाणी',t2:'सकाळचा व्यायाम (20–25 मिनिटे)',
+  t3:'खांद्याचे स्नायू व्यायाम',t4:'निरोगी नाश्ता (तळलेले नाही)',
+  t5:'मध्य-सकाळचा नाश्ता',t6:'दुपारचे जेवण — योग्य प्रमाण',
+  t7:'संध्याकाळचा नाश्ता — भाजलेले',t8:'संध्याकाळचा व्यायाम',
+  t9:'रात्री 8 च्या आधी हलके जेवण',t10:'कोमट तेलाने खांद्याची मालिश',
+  t11:'झोपण्यापूर्वी हळदीचे दूध',t12:'आज तळलेले/जंक फूड नाही',
+  wt:'उद्दिष्ट: 10 ग्लास (2.5–3 लीटर)',rb2:'नवीन दिवसासाठी रीसेट करा',
+  av_t:'पूर्णपणे टाळा',rd_t:'कमी करा — बंद करू नका',sw_t:'स्मार्ट बदल',
+  av1:'तळलेले — पुरी, पकोडा, समोसा, भटुरा',av2:'मैदा — पांढरी ब्रेड, नान, बिस्किटे',
+  av3:'गोड पेये — कोल्ड ड्रिंक, पॅकेज्ड ज्यूस',av4:'तळलेला पापड, चिप्स, स्नॅक्स',
+  av5:'रात्री पांढरे तांदूळ',av6:'जास्त क्रीम, मलाई, लोणी',av7:'मद्यपान',
+  rd1:'तेल — जास्तीत जास्त 2–3 छोटे चमचे/दिवस',rd2:'तूप — फक्त ½ चमचा एकदा',
+  rd3:'चहा/कॉफी — जास्तीत जास्त 2 कप',rd4:'मीठ — सेंधव मीठ वापरा',rd5:'तांदूळ — दुपारी 1 कप तपकिरी',
+  sf1:'पांढरे तांदूळ',st1:'तपकिरी तांदूळ/ज्वारी',sf2:'मैदा रोटी',st2:'गहू/ज्वारी/बाजरी',
+  sf3:'ग्रेव्हीत क्रीम',st3:'दही/नारळाचे दूध',sf4:'लस्सी',st4:'ताक',
+  sf5:'तळलेला पापड',st5:'भाजलेला पापड',sf6:'खोल तळणे',st6:'नॉन-स्टिक, ½ चमचा तेल',
+  ak_t:'🔑 AI फीचरसाठी API Key आवश्यक',
+  ak_d:'AI फीचर वापरण्यासाठी Anthropic API Key टाका. console.anthropic.com वर मोफत मिळते.',
+  ak_s:'Key सेव्ह करा',ak_ok:'✅ Key सेव्ह! AI फीचर सक्रिय आहेत.',ak_no:'❌ कृपया sk-ant- ने सुरू होणारी key टाका',
+  sp_t:'स्वॅप तपासक',sp_d:'योजनेत काय आहे आणि तुम्हाला काय हवे ते सांगा.',
+  sl1:'जेवणाचा प्रकार',sl2:'योजनेत काय आहे',sl3:'तुम्हाला काय हवे',
+  sw_btn:'✓ हा बदल तपासा',sw_chk:'⏳ तपासत आहे...',sw_err:'कृपया सर्व फील्ड भरा',
+  sw_con:'⚠️ कनेक्ट होता आले नाही. API Key तपासा.',
+  qe_t:'⚡ जलद उदाहरणे',sh_t:'📋 अलीकडील तपासणी',clh:'इतिहास साफ करा',
+  qchips:[
+    {l:'तपकिरीऐवजी पांढरे तांदूळ',m:'lunch',o:'brown rice',n:'white rice'},
+    {l:'पालक भाजी घाला',m:'lunch',o:'dal tadka',n:'palak sabji'},
+    {l:'चिल्ल्याऐवजी पोहे',m:'breakfast',o:'moong dal chilla',n:'poha'},
+    {l:'दुपारी बिर्याणी',m:'lunch',o:'brown rice',n:'biryani'},
+    {l:'स्नॅकमध्ये समोसा',m:'evening snack',o:'roasted chana',n:'samosa'},
+    {l:'ज्वारीऐवजी गव्हाची रोटी',m:'dinner',o:'jowar roti',n:'wheat roti'},
+  ],
+  meal_opts:['नाश्ता','मध्य-सकाळ','दुपारचे जेवण','संध्याकाळचा नाश्ता','रात्रीचे जेवण'],
+  ai_t:'AI जेवण निर्माता',ai_d:'तुमच्याकडे काय आहे ते सांगा — मी सर्वोत्तम भारतीय जेवण बनवतो.',
+  al1:'कोणते जेवण?',al2:'उपलब्ध जिन्नस निवडा',
+  iph:'इतर जिन्नस टाइप करा...',icnt_e:'0 जिन्नस — वरून निवडा किंवा टाइप करा',
+  apl:'प्राधान्ये',anl:'AI ला आणखी काही सांगायचे?',anph:'उदा. थकलेलो, काहीतरी गरम हवे...',
+  ai_btn:'🍽️ सर्वोत्तम जेवण बनवा',ai_cook:'⏳ AI जेवण बनवत आहे...',ai_thk:'परफेक्ट जेवण तयार होत आहे...',
+  ai_thk2:'जिन्नस व आरोग्य उद्दिष्टे तपासत आहे',ai_con:'⚠️ कनेक्ट होता आले नाही. API Key तपासा.',
+  ai_2:'किमान 2 जिन्नस जोडा',
+  prefs:['कांदा/लसूण नको','खूप तिखट 🌶️','कमी तिखट','लवकर (<15 मि)','जास्त प्रथिने','हलके','शिजवायचे नाही'],
+  pref_v:['no onion no garlic','very spicy','mild','quick under 15 min','high protein','light easy digest','no cooking'],
+  cat_all:'सर्व',cats:['🌾 धान्य','🫘 डाळ','🥦 भाज्या','🥛 दुग्धजन्य','🌶️ मसाले','🍎 फळे/मेवे'],
+  cat_k:['all','grains','dal','veg','dairy','spice','fruit'],
+  ing_c:' जिन्नस जोडले',
+  ih:'जिन्नस',hm:'कसे बनवायचे',ptips:'💡 टिप्स',wg:'✅ का चांगले',nt:'पुढच्या वेळी:',om:'💡 इतर जेवणे',
+  kcal:'kcal',prot:'प्रथिने',fib:'तंतू',fat:'चरबी',hs:'आरोग्य गुण',
+  tp1t:'खांद्याच्या दुखण्यापासून आराम',tp2t:'दाहविरोधी अन्न',tp3t:'सर्वोत्तम पेये',
+  tp1_1:'रात्री कोमट मोहरीच्या तेलाने दोन्ही खांद्यांची मालिश',
+  tp1_2:'फोरआर्म/एल्बो कुबड्या वापरा — कमी नुकसान',
+  tp1_3:'गद्देदार कुबडी हँडल — मनगटाचा ताण कमी',
+  tp1_4:'व्हीलचेअरमध्ये सरळ बसा — वाकल्याने खांद्यावर भार',
+  tp1_5:'रोज दाहविरोधी अन्न: हळद, आले, आवळा, अक्रोड',
+  tp2_1:'<b>हळद</b> — दाळ, दूध, भाजीत रोज',
+  tp2_2:'<b>आले</b> — आल्याचा चहा किंवा जेवणात',
+  tp2_3:'<b>आवळा</b> — कच्चा, रस किंवा मुरब्बा',
+  tp2_4:'<b>अक्रोड</b> — रोज 4, सांध्यांसाठी सर्वोत्तम',
+  tp2_5:'<b>जवस</b> — 1 चमचा दह्यात किंवा पिठात',
+  tp3_1:'जिरे पाणी — दररोज सकाळी',tp3_2:'ताक — दुपारच्या जेवणानंतर',
+  tp3_3:'नारळ पाणी — सांध्यांसाठी',tp3_4:'ग्रीन/आल्याचा चहा — 1–2 कप',
+  tp3_5:'हळदीचे दूध — रोज रात्री',
+  n1:'होम',n2:'आहार',n3:'व्यायाम',n4:'ट्रॅकर',n5:'नियम',n6:'स्वॅप',n7:'AI Chef',n8:'टिप्स',
+  doc:'🩺 सुरू करण्यापूर्वी डॉक्टरांना दाखवा.',
+  dmsgs:['खाली दिलेल्या कामावर टॅप करा','छान सुरुवात!','अर्धे झाले!','जवळजवळ परफेक्ट!','परफेक्ट दिवस! 🎉'],
+  w_done:'पाण्याचे उद्दिष्ट पूर्ण! 💧',stk_toast:'दिवस {n} ची स्ट्रीक! 🔥',
+  rst_c:'नवीन दिवसासाठी रीसेट करायचे?',clh_c:'स्वॅप इतिहास साफ करायचा?',
+  diet:{
+    mon:{b:'2 मूग डाळ चिल्ले + हिरवी चटणी + कमी साखरेचा मसाला चहा',bn:'नॉन-स्टिक तवा, ½ चमचा तेल.',mm:'1 केळे + 5 बदाम',l:'तपकिरी तांदूळ + डाळ तडका (जिरे, हिंग, हिरवी मिरची) + काकडी कोशिंबीर + दही',sn:'भाजलेले चणे + जिरे-काळ्या मिठाचे ताक',d:'2 ज्वारी/बाजरी भाकरी + पालक भाजी + डाळ',dn:'रात्री तांदूळ नाही'},
+    tue:{b:'पोहे (मोहरी, कढीपत्ता, हिरवी मिरची, मटार, कांदा) + दही + लिंबू',mm:'1 पेरू किंवा संत्रे + 4 अक्रोड',l:'2 गव्हाच्या पोळ्या + राजमा करी (कमी तेल) + कोशिंबीर + दही',sn:'भाजलेले मखाने मिरची व काळ्या मिरीसह',d:'मूग डाळ खिचडी (थोडे तूप, हळद) + भाजीचे सूप'},
+    wed:{b:'बेसन किंवा अंड्याचे ऑम्लेट (मिरची, कोथिंबीर, कांदा) + 1 मल्टीग्रेन टोस्ट',mm:'नारळ पाणी किंवा लिंबूसरबत (साखर नाही)',l:'2 पोळ्या + कोरडे छोले मसाला + जिरे रायता + कोशिंबीर',sn:'मोड आलेले मूग चाट — मूग, कांदा, टोमॅटो, चाट मसाला, लिंबू',d:'भाजी दलिया + डाळ + दही'},
+    thu:{b:'2–3 इडली + हलके सांबार + हिरवी चटणी',bn:'आंबवलेले अन्न — आतड्यासाठी चांगले',mm:'1 सफरचंद + 5 बदाम',l:'तपकिरी तांदूळ + मिश्र भाजी (कोरडी) + सांबार + दही',sn:'ग्रीन टी + भाजलेली शेंगदाणे',d:'2 ज्वारी भाकरी + दुधी भाजी + मूग डाळ'},
+    fri:{b:'उपमा (रवा, भाज्या, मोहरी, कढीपत्ता, हिरवी मिरची) + नारळाची चटणी',mm:'लिंबूसरबत (साखर नाही, सेंधव मीठ) + 4 बदाम',l:'2 पोळ्या + चिकन करी (खाल नाही, कमी तेल) किंवा पनीर भुर्जी + कोशिंबीर + दही',sn:'ताक + उकडलेली मका चाट',d:'खिचडी + भाजीचे सूप + दही'},
+    sat:{b:'2 बेसन चिल्ले + पुदिना चटणी + कमी साखरेचा चहा',mm:'1 वाटी पपई किंवा टरबूज',l:'कोरडे छोले (कमी तेल) + तपकिरी तांदूळ किंवा 2 पोळ्या + कोशिंबीर + रायता',sn:'भाजलेले मखाने + ग्रीन टी किंवा ताक',d:'2 पोळ्या + पालक/मेथी भाजी + डाळ + दही'},
+    sun:{b:'ओट्स लापशी (कमी चरबीचे दूध) + जवस/चिया बिया + 1 चमचा मध',mm:'1 संत्रे किंवा मोसंबी + 4 अक्रोड',l:'डाळ खिचडी (थोडे तूप) + भाजलेला पापड + दही + हिरवी चटणी',sn:'ताक + मोड आलेले चाट',d:'भाजीचे सूप + 2 छोट्या पोळ्या + हलकी भाजी'}
+  }
+}
+};
+
+// Ingredient database (English always)
+const IDB=[
+  {n:'Brown rice',c:'grains'},{n:'Jowar roti',c:'grains'},{n:'Bajra roti',c:'grains'},{n:'Wheat flour',c:'grains'},{n:'Poha',c:'grains'},{n:'Sooji/Rava',c:'grains'},{n:'Dalia',c:'grains'},{n:'Oats',c:'grains'},{n:'Multigrain bread',c:'grains'},{n:'Ragi',c:'grains'},
+  {n:'Moong dal',c:'dal'},{n:'Chana dal',c:'dal'},{n:'Toor dal',c:'dal'},{n:'Masoor dal',c:'dal'},{n:'Rajma',c:'dal'},{n:'Chole',c:'dal'},{n:'Moong sprouts',c:'dal'},{n:'Paneer',c:'dal'},{n:'Eggs',c:'dal'},{n:'Chicken (skinless)',c:'dal'},{n:'Roasted chana',c:'dal'},{n:'Peanuts',c:'dal'},
+  {n:'Spinach/Palak',c:'veg'},{n:'Lauki',c:'veg'},{n:'Onion',c:'veg'},{n:'Tomato',c:'veg'},{n:'Potato',c:'veg'},{n:'Cauliflower',c:'veg'},{n:'Peas/Matar',c:'veg'},{n:'Carrot',c:'veg'},{n:'Beans',c:'veg'},{n:'Methi',c:'veg'},{n:'Cucumber',c:'veg'},{n:'Capsicum',c:'veg'},{n:'Corn',c:'veg'},{n:'Beetroot',c:'veg'},
+  {n:'Curd/Dahi',c:'dairy'},{n:'Low-fat milk',c:'dairy'},{n:'Chaas',c:'dairy'},{n:'Ghee (small)',c:'dairy'},
+  {n:'Turmeric',c:'spice'},{n:'Jeera',c:'spice'},{n:'Mustard seeds',c:'spice'},{n:'Green chilli',c:'spice'},{n:'Ginger',c:'spice'},{n:'Garlic',c:'spice'},{n:'Curry leaves',c:'spice'},{n:'Coriander',c:'spice'},{n:'Hing',c:'spice'},{n:'Lemon',c:'spice'},{n:'Black pepper',c:'spice'},
+  {n:'Banana',c:'fruit'},{n:'Apple',c:'fruit'},{n:'Guava',c:'fruit'},{n:'Orange',c:'fruit'},{n:'Papaya',c:'fruit'},{n:'Almonds',c:'fruit'},{n:'Walnuts',c:'fruit'},{n:'Makhana',c:'fruit'},{n:'Flaxseeds',c:'fruit'},{n:'Dates',c:'fruit'},
+];
+
+// State
+let lang=localStorage.getItem('mh_lang')||'en';
+let selI=new Set(), selP=new Set(), aCat='all';
+const DK=['mon','tue','wed','thu','fri','sat','sun'];
+
+// ═══════════════════════════
+// LANG ENGINE
+// ═══════════════════════════
+function setLang(l,btn){
+  lang=l; localStorage.setItem('mh_lang',l);
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  applyLang();
+}
+function L(){return T[lang];}
+function g(k){return L()[k]||T.en[k]||'';}
+
+function setEl(id,val){const e=document.getElementById(id);if(e&&val!==undefined)e.innerHTML=val;}
+
+function applyLang(){
+  const l=L();
+  // header
+  setEl('hsub',l.hsub);
+  // streak
+  setEl('stk-l',l.stk_l);
+  // stats
+  setEl('s1l',l.s1l);setEl('s1u',l.s1u);setEl('s2l',l.s2l);setEl('s2u',l.s2u);
+  setEl('s3l',l.s3l);setEl('s3u',l.s3u);setEl('s4l',l.s4l);setEl('s4u',l.s4u);
+  // schedule
+  setEl('sch-t',l.sch_t);setEl('sc1',l.sc1);setEl('sc1n',l.sc1n);setEl('sc2',l.sc2);
+  setEl('sc3',l.sc3);setEl('sc4',l.sc4);setEl('sc5',l.sc5);setEl('sc6',l.sc6);
+  setEl('sc7',l.sc7);setEl('sc8',l.sc8);setEl('sc8n',l.sc8n);
+  // nutrition
+  setEl('nut-t',l.nut_t);setEl('np1',l.np1);setEl('np2',l.np2);setEl('np3',l.np3);
+  // milestones
+  setEl('mil-t',l.mil_t);setEl('m1t',l.m1t);setEl('m1',l.m1);setEl('m2t',l.m2t);setEl('m2',l.m2);
+  setEl('m3t',l.m3t);setEl('m3',l.m3);setEl('m4t',l.m4t);setEl('m4',l.m4);
+  // diet
+  setEl('wn',l.wn); buildDayPills(); applyDiet();
+  // exercise
+  setEl('exw',l.exw);setEl('exm',l.exm);setEl('exe',l.exe);setEl('ext',l.ext);
+  for(let i=1;i<=10;i++){setEl('e'+i+'n',l['e'+i+'n']);setEl('e'+i+'d',l['e'+i+'d']);setEl('e'+i+'b',l['e'+i+'b']);}
+  // tracker
+  setEl('tt',l.tt);setEl('tm',l.tm);setEl('ta',l.ta);setEl('te',l.te);setEl('tw',l.tw);
+  setEl('wt',l.wt);setEl('rb2',l.rb2);
+  for(let i=1;i<=12;i++) setEl('t'+i,l['t'+i]);
+  updateCount();
+  // rules
+  setEl('av-t',l.av_t);setEl('rd-t',l.rd_t);setEl('sw-t',l.sw_t);
+  for(let i=1;i<=7;i++) setEl('av'+i,l['av'+i]);
+  for(let i=1;i<=5;i++) setEl('rd'+i,l['rd'+i]);
+  for(let i=1;i<=6;i++){setEl('sf'+i,l['sf'+i]);setEl('st'+i,l['st'+i]);}
+  // swap
+  setEl('ak-t',l.ak_t);setEl('ak-d',l.ak_d);setEl('ak-s',l.ak_s);
+  setEl('sp-t',l.sp_t);setEl('sp-d',l.sp_d);
+  setEl('sl1',l.sl1);setEl('sl2',l.sl2);setEl('sl3',l.sl3);
+  const swb=document.getElementById('sw-btn'); if(swb)swb.textContent=l.sw_btn;
+  setEl('qe-t',l.qe_t);setEl('sh-t',l.sh_t);setEl('clh',l.clh);
+  buildMealSelect('sw-meal-sel',l.meal_opts,'lunch');
+  buildQuickChips();
+  // ai chef
+  setEl('ai-t',l.ai_t);setEl('ai-d',l.ai_d);setEl('al1',l.al1);setEl('al2',l.al2);
+  setEl('apl',l.apl);setEl('anl',l.anl);
+  const aib=document.getElementById('ai-btn'); if(aib)aib.textContent=l.ai_btn;
+  const iinp=document.getElementById('iinp'); if(iinp)iinp.placeholder=l.iph;
+  const anote=document.getElementById('ai-note'); if(anote)anote.placeholder=l.anph;
+  buildMealSelect('ai-meal-sel',l.meal_opts,'lunch');
+  buildCats(); buildPrefs(); rPresets(); rTags();
+  // tips
+  setEl('tp1t',l.tp1t);setEl('tp2t',l.tp2t);setEl('tp3t',l.tp3t);setEl('doc',l.doc);
+  for(let i=1;i<=5;i++){setEl('tp1-'+i,l['tp1_'+i]);setEl('tp2-'+i,l['tp2_'+i]);}
+  for(let i=1;i<=5;i++) setEl('tp3-'+i,l['tp3_'+i]);
+  // nav
+  for(let i=1;i<=8;i++) setEl('n'+i,l['n'+i]);
+  // date
+  updateHdr();
+}
+
+function buildMealSelect(id,opts,def){
+  const sel=document.getElementById(id); if(!sel)return;
+  const prev=sel.value||def;
+  sel.innerHTML=opts.map((o,i)=>{
+    const vals=['breakfast','mid-morning snack','lunch','evening snack','dinner'];
+    return `<option value="${vals[i]}"${vals[i]===prev?' selected':''}>${o}</option>`;
+  }).join('');
+}
+
+function buildDayPills(){
+  const c=document.getElementById('day-pills'); if(!c)return;
+  const todayIdx=new Date().getDay(); // 0=sun
+  const pillIdx=todayIdx===0?6:todayIdx-1;
+  c.innerHTML=DK.map((d,i)=>`<div class="dp${i===pillIdx?' on':''}" onclick="showDay('${d}',this)">${L().days[i]}</div>`).join('');
+}
+
+function applyDiet(){
+  const l=L(); const dd=l.diet; const ml=l.meals;
+  DK.forEach(day=>{
+    const d=dd[day]; if(!d)return;
+    const el=document.getElementById('d-'+day); if(!el)return;
+    let h=`<div class="mb"><div class="mbt">${ml[0]}</div><div class="mn">${d.b}</div>`;
+    if(d.bn)h+=`<div class="mnote">${d.bn}</div>`;
+    h+=`</div>`;
+    h+=`<div class="mb"><div class="mbt">${ml[1]}</div><div class="mn">${d.mm}</div></div>`;
+    h+=`<div class="mb"><div class="mbt">${ml[2]}</div><div class="mn">${d.l}</div></div>`;
+    h+=`<div class="mb"><div class="mbt">${ml[3]}</div><div class="mn">${d.sn}</div></div>`;
+    h+=`<div class="mb"><div class="mbt">${ml[4]}</div><div class="mn">${d.d}</div>`;
+    if(d.dn)h+=`<div class="mnote">${d.dn}</div>`;
+    h+=`</div>`;
+    if(day==='sun')h=`<div class="ban g">${lang==='hi'?'🌿 रविवार — हल्का दिन। पाचन को आराम दें।':lang==='mr'?'🌿 रविवार — हलका दिवस. पचनसंस्थेला आराम द्या.':'🌿 Sunday — light day. Rest your digestion.'}</div>`+h;
+    el.innerHTML=h;
+  });
+}
+
+function buildCats(){
+  const l=L(); const c=document.getElementById('catsc'); if(!c)return;
+  c.innerHTML=[l.cat_all,...l.cats].map((n,i)=>`<button class="cbtn${l.cat_k[i]===aCat?' on':''}" onclick="fcat('${l.cat_k[i]}',this)">${n}</button>`).join('');
+}
+function buildPrefs(){
+  const l=L(); const c=document.getElementById('pref-div'); if(!c)return;
+  c.innerHTML=l.prefs.map((p,i)=>`<button class="pfc${selP.has(l.pref_v[i])?' on':''}" onclick="togPf(this,'${l.pref_v[i]}')">${p}</button>`).join('');
+}
+function buildQuickChips(){
+  const c=document.getElementById('qchips'); if(!c)return;
+  c.innerHTML=L().qchips.map(q=>`<span class="qc" onclick="qfill('${q.m}','${q.o}','${q.n}')">${q.l}</span>`).join('');
+}
+
+// ═══════════════════════════
+// NAV
+// ═══════════════════════════
 function updateHdr(){
   const n=new Date();
-  document.getElementById('hdr-date').textContent=DNAMES[n.getDay()]+', '+n.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  const dl=L().days;
+  const di=n.getDay()===0?6:n.getDay()-1;
+  const el=document.getElementById('hdate');
+  if(el)el.textContent=dl[di]+', '+n.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
 }
-updateHdr();
-
 function goP(name,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
   document.getElementById('p-'+name).classList.add('on');
   btn.classList.add('on');
   window.scrollTo(0,0);
 }
-
 function showDay(day,el){
   document.querySelectorAll('.ms').forEach(s=>s.classList.remove('on'));
   document.querySelectorAll('.dp').forEach(p=>p.classList.remove('on'));
   document.getElementById('d-'+day).classList.add('on');
   el.classList.add('on');
 }
-(function autoDay(){
-  const t=DAYS[new Date().getDay()];
-  const p=document.querySelector('[onclick="showDay(\''+t+'\',this)"]');
-  if(p){showDay(t,p);p.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}
-})();
-
 function showNotif(msg){
   const n=document.getElementById('notif');
-  n.textContent=msg;n.classList.add('show');
+  n.textContent=msg; n.classList.add('show');
   setTimeout(()=>n.classList.remove('show'),2500);
 }
 
-// ── TRACKER ──
+// ═══════════════════════════
+// TRACKER
+// ═══════════════════════════
 const TK='mh_t_'+new Date().toDateString();
 const WK='mh_w_'+new Date().toDateString();
-const SK='mh_streak';const LK='mh_last';
+const SK='mh_streak', LK='mh_last';
 
 function tog(el){
   el.classList.toggle('done');
   el.querySelector('.ck').style.display=el.classList.contains('done')?'block':'none';
-  updCount();saveT();
+  updCount(); saveT();
 }
 function updCount(){
   const total=document.querySelectorAll('.ci').length;
   const done=document.querySelectorAll('.ci.done').length;
-  document.getElementById('done-count').textContent=done;
-  document.getElementById('done-bar').style.width=Math.round(done/total*100)+'%';
-  const msgs=['Tap items below to mark them done','Great start — keep going!','Halfway there!','Almost a perfect day!','Perfect day — amazing! 🎉'];
-  document.getElementById('done-msg').textContent=msgs[Math.min(Math.floor(done/total*4),4)];
-  if(done===total)updStreak();
+  const c=document.getElementById('dc'); if(c)c.textContent=done;
+  const bar=document.getElementById('db'); if(bar)bar.style.width=Math.round(done/total*100)+'%';
+  const msgs=L().dmsgs;
+  const dm=document.getElementById('dm'); if(dm)dm.textContent=msgs[Math.min(Math.floor(done/total*4),4)];
+  if(done===total&&total>0)updStreak();
 }
 function updStreak(){
   const today=new Date().toDateString();
   const last=localStorage.getItem(LK);
   if(last===today)return;
-  const yest=new Date();yest.setDate(yest.getDate()-1);
+  const yest=new Date(); yest.setDate(yest.getDate()-1);
   let s=parseInt(localStorage.getItem(SK)||'0');
   s=(last===yest.toDateString())?s+1:1;
-  localStorage.setItem(SK,s);localStorage.setItem(LK,today);
-  document.getElementById('streak-num').textContent=s;
-  showNotif('Day '+s+' streak! 🔥');
+  localStorage.setItem(SK,s); localStorage.setItem(LK,today);
+  const sn=document.getElementById('stk-n'); if(sn)sn.textContent=s;
+  showNotif(g('stk_toast').replace('{n}',s));
 }
+function updateCount(){updCount();}
 function saveT(){
   const st=Array.from(document.querySelectorAll('.ci')).map(i=>i.classList.contains('done'));
   localStorage.setItem(TK,JSON.stringify(st));
@@ -579,211 +937,281 @@ function loadT(){
     document.querySelectorAll('.ci').forEach((el,i)=>{if(s[i]){el.classList.add('done');el.querySelector('.ck').style.display='block';}});
     updCount();
     const w=JSON.parse(localStorage.getItem(WK)||'[]');
-    document.querySelectorAll('.wgl').forEach((g,i)=>{if(w[i])g.classList.add('filled');});
+    document.querySelectorAll('.wgl').forEach((gl,i)=>{if(w[i])gl.classList.add('filled');});
   }catch(e){}
 }
 function resetT(){
-  if(!confirm('Reset all tasks for a new day?'))return;
+  if(!confirm(g('rst_c')))return;
   document.querySelectorAll('.ci').forEach(el=>{el.classList.remove('done');el.querySelector('.ck').style.display='none';});
-  document.querySelectorAll('.wgl').forEach(g=>g.classList.remove('filled'));
-  updCount();saveT();
+  document.querySelectorAll('.wgl').forEach(gl=>gl.classList.remove('filled'));
+  updCount(); saveT();
 }
-(function loadStreak(){document.getElementById('streak-num').textContent=localStorage.getItem(SK)||'0';})();
 
-// water glasses
-(function buildWater(){
-  const wg=document.getElementById('wg');
+// Build water glasses
+(function(){
+  const wg=document.getElementById('wg'); if(!wg)return;
   for(let i=0;i<10;i++){
-    const g=document.createElement('div');g.className='wgl';g.textContent='🥛';
-    g.onclick=function(){
+    const gl=document.createElement('div'); gl.className='wgl'; gl.textContent='🥛';
+    gl.onclick=function(){
       this.classList.toggle('filled');
-      if(document.querySelectorAll('.wgl.filled').length===10)showNotif('Water goal achieved! 💧');
+      if(document.querySelectorAll('.wgl.filled').length===10)showNotif(g('w_done'));
       saveT();
     };
-    wg.appendChild(g);
+    wg.appendChild(gl);
   }
 })();
-loadT();
 
-// ── SWAP ──
+// ═══════════════════════════
+// API KEY
+// ═══════════════════════════
+function getKey(){return localStorage.getItem('mh_key')||'';}
+function saveKey(){
+  const v=document.getElementById('aki').value.trim();
+  const st=document.getElementById('aks');
+  if(!v||(!v.startsWith('sk-ant-')&&!v.startsWith('sk-'))){
+    st.textContent=g('ak_no'); st.className='aks akno'; st.style.display='block'; return;
+  }
+  localStorage.setItem('mh_key',v);
+  st.textContent=g('ak_ok'); st.className='aks akok'; st.style.display='block';
+  showNotif(g('ak_ok'));
+}
+
+// ═══════════════════════════
+// CLAUDE API — FIXED
+// ═══════════════════════════
+async function callClaude(prompt,maxTokens){
+  const key=getKey();
+  if(!key)throw new Error('NO_KEY');
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key':key,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-calls':'true'
+    },
+    body:JSON.stringify({
+      model:'claude-haiku-4-5-20251001',
+      max_tokens:maxTokens||1200,
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||'HTTP '+res.status);}
+  const d=await res.json();
+  return (d.content?.[0]?.text||'').replace(/```json\s*/g,'').replace(/```\s*/g,'').trim();
+}
+
+// ═══════════════════════════
+// SWAP CHECKER
+// ═══════════════════════════
 const SHK='mh_sh';
 function qfill(m,o,n){
-  document.getElementById('sw-meal').value=m;
-  document.getElementById('sw-orig').value=o;
-  document.getElementById('sw-new').value=n;
+  const ms=document.getElementById('sw-meal-sel'); if(ms)ms.value=m;
+  const oi=document.getElementById('sw-or'); if(oi)oi.value=o;
+  const ni=document.getElementById('sw-nw'); if(ni)ni.value=n;
   clrR();
 }
-function clrR(){
-  const rb=document.getElementById('sw-result');
-  rb.className='rb';rb.innerHTML='';
-}
-async function checkSwap(){
-  const meal=document.getElementById('sw-meal').value;
-  const orig=document.getElementById('sw-orig').value.trim();
-  const nw=document.getElementById('sw-new').value.trim();
-  if(!meal||!orig||!nw){showNotif('Please fill all 3 fields');return;}
+function clrR(){const rb=document.getElementById('swr2');if(rb){rb.className='rb';rb.innerHTML='';}}
+async function doSwap(){
+  const l=L();
+  const meal=(document.getElementById('sw-meal-sel')||{}).value||'lunch';
+  const orig=(document.getElementById('sw-or')||{}).value||'';
+  const nw=(document.getElementById('sw-nw')||{}).value||'';
+  if(!orig.trim()||!nw.trim()){showNotif(l.sw_err);return;}
   const btn=document.getElementById('sw-btn');
-  btn.disabled=true;btn.textContent='⏳ Checking...';
-  const rb=document.getElementById('sw-result');
+  if(btn){btn.disabled=true;btn.textContent=l.sw_chk;}
+  const rb=document.getElementById('swr2');
   rb.className='rb show ram';
-  rb.innerHTML='<div class="rv">⏳</div><div class="rs">Analysing your swap...</div>';
-  const prompt=`You are a diet expert. Your client: polio-affected wheelchair user, right leg non-functional, shoulder pain from crutches, overweight, Indian food lover, daily calorie target 1400-1600 kcal, minimal oil, no deep frying.
-Plan says for ${meal}: "${orig}". They want: "${nw}".
-Respond ONLY as valid JSON (no markdown):
-{"verdict":"GO or CAUTION or STOP","emoji":"✅ or ⚠️ or 🚫","summary":"short verdict under 12 words","reason":"2-3 sentences why","calories_original":"approx kcal","calories_swap":"approx kcal","protein_change":"higher/similar/lower","pros":["pro1"],"cons":["con1"],"tip":"one practical tip"}`;
+  rb.innerHTML=`<div class="rv">⏳</div><div class="rs2">${l.sw_chk}</div>`;
+  const rl=lang==='hi'?'Hindi':lang==='mr'?'Marathi':'English';
+  const prompt=`You are a diet expert. Client: polio wheelchair user, shoulder pain, overweight, 1400–1600 kcal/day, minimal oil, no deep frying, loves Indian food. Reply in ${rl}.
+For ${meal}, plan says: "${orig}". They want: "${nw}".
+Reply ONLY valid JSON no markdown:
+{"verdict":"GO or CAUTION or STOP","emoji":"✅ or ⚠️ or 🚫","summary":"short verdict","reason":"2–3 sentences","cal_orig":"kcal approx","cal_swap":"kcal approx","protein_change":"higher/similar/lower","pros":["pro1"],"cons":["con1"],"tip":"one practical tip"}`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:[{role:'user',content:prompt}]})});
-    const d=await res.json();
-    const r=JSON.parse((d.content?.[0]?.text||'').replace(/```json|```/g,'').trim());
-    showSwapResult(r);
-    saveSwapHist(r,meal,orig,nw);
+    const raw=await callClaude(prompt,900);
+    const r=JSON.parse(raw);
+    showSwapRes(r); saveSwapH(r,meal,orig,nw);
   }catch(e){
     rb.className='rb show rr';
-    rb.innerHTML='<div class="rv">⚠️ Error</div><div class="rs">Could not connect. Check internet and try again.</div>';
+    const msg=e.message==='NO_KEY'?'🔑 '+l.ak_t+' — '+l.ak_d:l.sw_con+'\n('+e.message+')';
+    rb.innerHTML=`<div class="rv">⚠️</div><div class="rs2" style="white-space:pre-wrap">${msg}</div>`;
   }
-  btn.disabled=false;btn.textContent='Check if this swap is OK ✓';
+  if(btn){btn.disabled=false;btn.textContent=l.sw_btn;}
 }
-function showSwapResult(r){
-  const rb=document.getElementById('sw-result');
+function showSwapRes(r){
+  const rb=document.getElementById('swr2');
   rb.className='rb show '+(r.verdict==='GO'?'rg':r.verdict==='CAUTION'?'ram':'rr');
-  let h=`<div class="rv">${r.emoji} ${r.verdict}</div><div class="rs">${r.summary}</div><div class="rd">${r.reason}</div>`;
-  h+=`<div class="rsect"><div class="rsect-t">Calorie comparison</div><div style="display:flex;gap:14px;font-size:13px"><div><div style="opacity:.6;font-size:10px">Original</div><strong>${r.calories_original}</strong></div><div style="font-size:17px;opacity:.4">→</div><div><div style="opacity:.6;font-size:10px">Your swap</div><strong>${r.calories_swap}</strong></div><div><div style="opacity:.6;font-size:10px">Protein</div><strong>${r.protein_change}</strong></div></div></div>`;
-  if(r.pros?.length)h+=`<div class="rsect"><div class="rsect-t">👍 What's good</div><ul class="rl2">${r.pros.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
-  if(r.cons?.length)h+=`<div class="rsect"><div class="rsect-t">👎 Watch out</div><ul class="rl2">${r.cons.map(c=>`<li>${c}</li>`).join('')}</ul></div>`;
-  if(r.tip)h+=`<div class="rsect" style="background:rgba(0,0,0,.04);border-radius:7px;padding:9px;border-top:none"><div class="rsect-t">💡 Tip</div><div style="font-size:13px">${r.tip}</div></div>`;
+  let h=`<div class="rv">${r.emoji} ${r.verdict}</div><div class="rs2">${r.summary}</div><div style="font-size:13px;line-height:1.5">${r.reason}</div>`;
+  h+=`<div class="rsec"><div class="rsect">${g('kcal')}</div><div style="display:flex;gap:12px;font-size:13px"><span><span style="opacity:.5;font-size:10px">Before </span><b>${r.cal_orig}</b></span><span style="opacity:.4">→</span><span><span style="opacity:.5;font-size:10px">After </span><b>${r.cal_swap}</b></span><span><span style="opacity:.5;font-size:10px">${g('prot')} </span><b>${r.protein_change}</b></span></div></div>`;
+  if(r.pros?.length)h+=`<div class="rsec"><div class="rsect">👍</div><ul class="rl2">${r.pros.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
+  if(r.cons?.length)h+=`<div class="rsec"><div class="rsect">👎</div><ul class="rl2">${r.cons.map(c=>`<li>${c}</li>`).join('')}</ul></div>`;
+  if(r.tip)h+=`<div class="rsec" style="background:rgba(0,0,0,.04);border-radius:6px;padding:8px"><div class="rsect">💡</div><div style="font-size:13px">${r.tip}</div></div>`;
   rb.innerHTML=h;
 }
-function saveSwapHist(r,meal,orig,nw){
+function saveSwapH(r,meal,orig,nw){
   try{
     const h=JSON.parse(localStorage.getItem(SHK)||'[]');
-    h.unshift({r,meal,orig,nw,time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'})});
-    if(h.length>12)h.pop();
-    localStorage.setItem(SHK,JSON.stringify(h));renderSwapHist();
+    h.unshift({r,meal,orig,nw,t:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),dt:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'})});
+    if(h.length>10)h.pop();
+    localStorage.setItem(SHK,JSON.stringify(h)); renderSwapH();
   }catch(e){}
 }
-function renderSwapHist(){
+function renderSwapH(){
   try{
     const h=JSON.parse(localStorage.getItem(SHK)||'[]');
-    const sec=document.getElementById('sw-hist-sec');
-    const lst=document.getElementById('sw-hist');
-    if(!h.length){sec.style.display='none';return;}
-    sec.style.display='block';
-    lst.innerHTML=h.map((x,i)=>`<div class="hi" onclick="reloadH(${i})"><div class="hv ${x.r.verdict==='GO'?'hvg':x.r.verdict==='CAUTION'?'hva':'hvr'}"></div><div><div style="font-size:13px">${x.r.emoji} <strong>${x.nw}</strong> instead of ${x.orig}</div><div style="font-size:11px;color:var(--g400)">${x.meal} · ${x.date} ${x.time}</div></div></div>`).join('');
+    const sec=document.getElementById('sh-sec'); const lst=document.getElementById('sh-list');
+    if(!h.length){if(sec)sec.style.display='none';return;}
+    if(sec)sec.style.display='block';
+    if(lst)lst.innerHTML=h.map((x,i)=>`<div class="hi" onclick="reloadH(${i})"><div class="hv ${x.r.verdict==='GO'?'hvg':x.r.verdict==='CAUTION'?'hva':'hvr'}"></div><div><div style="font-size:13px">${x.r.emoji} <b>${x.nw}</b> → ${x.orig}</div><div style="font-size:11px;color:var(--g4)">${x.meal} · ${x.dt} ${x.t}</div></div></div>`).join('');
   }catch(e){}
 }
 function reloadH(i){
-  try{const h=JSON.parse(localStorage.getItem(SHK)||'[]');const x=h[i];qfill(x.meal,x.orig,x.nw);showSwapResult(x.r);}catch(e){}
+  try{const h=JSON.parse(localStorage.getItem(SHK)||'[]');const x=h[i];qfill(x.meal,x.orig,x.nw);showSwapRes(x.r);}catch(e){}
 }
-function clrHist(){if(!confirm('Clear swap history?'))return;localStorage.removeItem(SHK);renderSwapHist();}
-renderSwapHist();
+function clrH(){
+  if(!confirm(g('clh_c')))return;
+  localStorage.removeItem(SHK); renderSwapH();
+}
 
-// ── AI CHEF ──
-const IDB=[
-  {n:'Brown rice',c:'grains'},{n:'White rice',c:'grains'},{n:'Jowar roti',c:'grains'},{n:'Bajra roti',c:'grains'},{n:'Wheat flour',c:'grains'},{n:'Poha',c:'grains'},{n:'Sooji/Rava',c:'grains'},{n:'Dalia',c:'grains'},{n:'Oats',c:'grains'},{n:'Multigrain bread',c:'grains'},{n:'Ragi/Millet',c:'grains'},
-  {n:'Moong dal',c:'dal'},{n:'Chana dal',c:'dal'},{n:'Toor dal',c:'dal'},{n:'Masoor dal',c:'dal'},{n:'Rajma',c:'dal'},{n:'Chole',c:'dal'},{n:'Moong sprouts',c:'dal'},{n:'Paneer',c:'dal'},{n:'Eggs',c:'dal'},{n:'Chicken (skinless)',c:'dal'},{n:'Roasted chana',c:'dal'},{n:'Peanuts',c:'dal'},
-  {n:'Spinach/Palak',c:'veg'},{n:'Lauki',c:'veg'},{n:'Onion',c:'veg'},{n:'Tomato',c:'veg'},{n:'Potato',c:'veg'},{n:'Cauliflower',c:'veg'},{n:'Cabbage',c:'veg'},{n:'Brinjal',c:'veg'},{n:'Peas/Matar',c:'veg'},{n:'Carrot',c:'veg'},{n:'Beans',c:'veg'},{n:'Methi',c:'veg'},{n:'Cucumber',c:'veg'},{n:'Capsicum',c:'veg'},{n:'Corn',c:'veg'},{n:'Beetroot',c:'veg'},{n:'Karela',c:'veg'},
-  {n:'Curd/Dahi',c:'dairy'},{n:'Low-fat milk',c:'dairy'},{n:'Chaas/Buttermilk',c:'dairy'},{n:'Ghee (small)',c:'dairy'},
-  {n:'Turmeric',c:'spice'},{n:'Jeera/Cumin',c:'spice'},{n:'Mustard seeds',c:'spice'},{n:'Green chilli',c:'spice'},{n:'Ginger',c:'spice'},{n:'Garlic',c:'spice'},{n:'Curry leaves',c:'spice'},{n:'Coriander leaves',c:'spice'},{n:'Hing',c:'spice'},{n:'Chaat masala',c:'spice'},{n:'Garam masala',c:'spice'},{n:'Lemon',c:'spice'},{n:'Black pepper',c:'spice'},
-  {n:'Banana',c:'fruit'},{n:'Apple',c:'fruit'},{n:'Guava',c:'fruit'},{n:'Orange',c:'fruit'},{n:'Papaya',c:'fruit'},{n:'Almonds',c:'fruit'},{n:'Walnuts',c:'fruit'},{n:'Makhana',c:'fruit'},{n:'Flaxseeds',c:'fruit'},{n:'Dates',c:'fruit'},
-];
-let selI=new Set(),selP=new Set(),aCat='all';
-
+// ═══════════════════════════
+// AI CHEF
+// ═══════════════════════════
 function rPresets(){
   const list=aCat==='all'?IDB:IDB.filter(x=>x.c===aCat);
-  document.getElementById('pgrid').innerHTML=list.map(x=>`<button class="pchip${selI.has(x.n)?' on':''}" onclick="togI('${x.n}',this)">${x.n}</button>`).join('');
+  const el=document.getElementById('pgd'); if(!el)return;
+  el.innerHTML=list.map(x=>`<button class="pch${selI.has(x.n)?' on':''}" onclick="togI('${x.n.replace(/'/g,"\\'").replace(/\//g,'\\/')}',this)">${x.n}</button>`).join('');
 }
 function fcat(cat,btn){
   aCat=cat;
   document.querySelectorAll('.cbtn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');rPresets();
+  btn.classList.add('on'); rPresets();
 }
-function togI(name,el){
-  selI.has(name)?selI.delete(name):selI.add(name);
-  el.classList.toggle('on');rTags();
-}
+function togI(name,el){selI.has(name)?selI.delete(name):selI.add(name);el.classList.toggle('on');rTags();}
 function addI(){
-  const inp=document.getElementById('ii');
-  const v=inp.value.trim();if(!v)return;
-  v.split(',').map(x=>x.trim()).filter(Boolean).forEach(x=>selI.add(x));
-  inp.value='';rTags();rPresets();
+  const inp=document.getElementById('iinp'); if(!inp)return;
+  inp.value.split(',').map(x=>x.trim()).filter(Boolean).forEach(x=>selI.add(x));
+  inp.value=''; rTags(); rPresets();
 }
 function remI(n){selI.delete(n);rTags();rPresets();}
 function rTags(){
-  const c=document.getElementById('itags');
-  const cnt=document.getElementById('icnt');
-  if(!selI.size){c.innerHTML='';cnt.textContent='0 ingredients added — tap above or type';return;}
-  c.innerHTML=Array.from(selI).map(n=>`<span class="itag">${n}<button class="itag-x" onclick="remI('${n}')">×</button></span>`).join('');
-  cnt.textContent=selI.size+' ingredient'+(selI.size===1?'':'s')+' added';
+  const c=document.getElementById('itags'); const cnt=document.getElementById('icnt');
+  if(!selI.size){if(c)c.innerHTML='';if(cnt)cnt.textContent=g('icnt_e');return;}
+  if(c)c.innerHTML=Array.from(selI).map(n=>`<span class="itag">${n}<button class="itx" onclick="remI('${n.replace(/'/g,"\\'")}')">×</button></span>`).join('');
+  if(cnt)cnt.textContent=selI.size+g('ing_c');
 }
-function togPf(btn){
-  const p=btn.dataset.p;
-  if(selP.has(p)){selP.delete(p);btn.classList.remove('on');}
-  else{selP.add(p);btn.classList.add('on');}
+function togPf(btn,val){
+  if(selP.has(val)){selP.delete(val);btn.classList.remove('on');}
+  else{selP.add(val);btn.classList.add('on');}
 }
-
 async function buildMeal(){
-  if(selI.size<2){showNotif('Add at least 2 ingredients first');return;}
-  const meal=document.getElementById('ai-meal').value;
-  const note=document.getElementById('ai-note').value.trim();
+  const l=L();
+  if(selI.size<2){showNotif(l.ai_2);return;}
+  const meal=(document.getElementById('ai-meal-sel')||{}).value||'lunch';
+  const note=(document.getElementById('ai-note')||{}).value||'';
   const prefs=Array.from(selP).join(', ');
   const ings=Array.from(selI).join(', ');
   const btn=document.getElementById('ai-btn');
-  btn.disabled=true;btn.textContent='⏳ AI is cooking...';
+  if(btn){btn.disabled=true;btn.textContent=l.ai_cook;}
   const out=document.getElementById('ai-out');
-  out.innerHTML='<div class="aic"><div class="spin">🍳</div><div style="margin-top:11px;font-size:14px;font-weight:500;color:var(--g600)">Building your perfect meal...</div><div style="font-size:12px;margin-top:3px;color:var(--g400)">Checking ingredients, nutrition &amp; your health goals</div></div>';
-
-  const prompt=`You are a personal Indian diet expert. Client profile: polio-affected wheelchair user, right leg non-functional, shoulder pain from crutches, overweight (losing weight safely), loves Indian spicy food, 1400-1600 kcal daily, max 1 tsp oil per meal, no deep frying, Indian vegetarian (occasional chicken ok), high protein + fibre preferred.
-Meal: ${meal}. Available ingredients: ${ings}.${prefs?` Preferences: ${prefs}.`:''}${note?` Note: ${note}.`:''}
-Respond ONLY as valid JSON (no markdown, no code fences):
-{"meal_name":"name","tagline":"short description under 8 words","health_score":8,"calories":320,"protein_g":14,"fibre_g":6,"fat_g":8,"cooking_time":"15 min","spice_level":"Medium","health_verdict":"one sentence why great for their condition","ingredients_used":["item with qty"],"steps":["step 1","step 2","step 3"],"pro_tips":["tip1","tip2"],"why_good":["reason1 specific to their health","reason2"],"alternatives":["alt meal 1","alt meal 2"],"next_time":"one thing to improve"}`;
-
+  out.innerHTML=`<div style="text-align:center;padding:26px;color:var(--g4)"><div style="font-size:28px;animation:spin 1.5s linear infinite;display:inline-block">🍳</div><div style="margin-top:10px;font-size:13px;font-weight:600;color:var(--g6)">${l.ai_thk}</div><div style="font-size:12px;margin-top:3px">${l.ai_thk2}</div></div>`;
+  const rl=lang==='hi'?'Hindi':lang==='mr'?'Marathi':'English';
+  const prompt=`You are a personal Indian diet expert. Client: polio wheelchair user, right leg non-functional, shoulder pain from crutches, overweight losing weight safely, loves spicy Indian food, 1400–1600 kcal/day, max 1 tsp oil/meal, no deep frying, high protein+fibre preferred. Reply in ${rl}.
+Meal: ${meal}. Available ingredients: ${ings}.${prefs?' Preferences: '+prefs+'.':''}${note?' Note: '+note+'.':''}
+Reply ONLY valid JSON no markdown:
+{"meal_name":"name","tagline":"under 8 words","health_score":8,"calories":320,"protein_g":14,"fibre_g":6,"fat_g":8,"time":"15 min","spice":"Medium","verdict":"one sentence","ingredients_used":["item qty"],"steps":["step1","step2","step3"],"pro_tips":["tip1"],"why_good":["reason1","reason2"],"alternatives":["alt1","alt2"],"next_time":"one improvement"}`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,messages:[{role:'user',content:prompt}]})});
-    const d=await res.json();
-    const r=JSON.parse((d.content?.[0]?.text||'').replace(/```json|```/g,'').trim());
+    const raw=await callClaude(prompt,1300);
+    const r=JSON.parse(raw);
     renderMeal(r);
   }catch(e){
-    out.innerHTML='<div class="ban r">⚠️ Could not connect to AI. Check internet and try again.</div>';
+    const msg=e.message==='NO_KEY'?'🔑 '+l.ak_t:l.ai_con+' ('+e.message+')';
+    out.innerHTML=`<div class="ban r">${msg}</div>`;
   }
-  btn.disabled=false;btn.textContent='🍽️ Build my best meal';
+  if(btn){btn.disabled=false;btn.textContent=l.ai_btn;}
 }
-
-function sc(s){return s>=8?'var(--green)':s>=6?'#d97706':'var(--red)';}
+function sc(s){return s>=8?'var(--gr)':s>=6?'#d97706':'var(--re)';}
 function renderMeal(r){
-  const out=document.getElementById('ai-out');
-  out.innerHTML=`
-  <div class="mres">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:9px;margin-bottom:3px">
-      <div><div class="mres-t">${r.meal_name}</div><div class="mres-s">${r.tagline} · ${r.cooking_time} · ${r.spice_level} spice</div></div>
-      <div style="text-align:center;flex-shrink:0"><div style="font-size:21px;font-weight:800;color:${sc(r.health_score)}">${r.health_score}/10</div><div style="font-size:9px;color:var(--g400)">health score</div></div>
-    </div>
-    <div class="ban g" style="margin-bottom:10px">${r.health_score>=8?'✅':r.health_score>=6?'⚠️':'🔴'} ${r.health_verdict}</div>
-    <div class="ngrid">
-      <div class="nb"><div class="nv">${r.calories}</div><div class="nl">kcal</div></div>
-      <div class="nb"><div class="nv">${r.protein_g}g</div><div class="nl">protein</div></div>
-      <div class="nb"><div class="nv">${r.fibre_g}g</div><div class="nl">fibre</div></div>
-      <div class="nb"><div class="nv">${r.fat_g}g</div><div class="nl">fat</div></div>
-    </div>
-    <div style="font-size:11px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin:11px 0 6px">Ingredients to use</div>
-    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:11px">
-      ${r.ingredients_used.map(i=>`<span style="background:var(--gl);color:var(--green);border:1px solid #86efac;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:500">${i}</span>`).join('')}
-    </div>
-    <div style="font-size:11px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">How to make it</div>
-    ${r.steps.map((s,i)=>`<div class="rstep"><div class="rsn">${i+1}</div><div>${s}</div></div>`).join('')}
-    ${r.pro_tips?.length?`<div style="background:var(--al);border-radius:7px;padding:11px;margin-top:11px"><div style="font-size:10px;font-weight:700;color:var(--amb);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">💡 Pro tips</div>${r.pro_tips.map(t=>`<div style="font-size:13px;color:#92400e;padding:2px 0;line-height:1.5">• ${t}</div>`).join('')}</div>`:''}
-    ${r.why_good?.length?`<div style="background:var(--gl);border-radius:7px;padding:11px;margin-top:9px"><div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">✅ Why great for you</div>${r.why_good.map(w=>`<div style="font-size:13px;color:#14532d;padding:2px 0;line-height:1.5">• ${w}</div>`).join('')}</div>`:''}
-    ${r.next_time?`<div style="background:var(--rl);border-radius:7px;padding:9px 11px;margin-top:9px;font-size:13px;color:#7f1d1d;line-height:1.5"><strong>Next time:</strong> ${r.next_time}</div>`:''}
-  </div>
-  ${r.alternatives?.length?`<div class="card" style="padding:13px"><div style="font-size:13px;font-weight:600;color:var(--g600);margin-bottom:7px">💡 Other meals you could make with these ingredients</div><div style="display:flex;gap:6px;flex-wrap:wrap">${r.alternatives.map(a=>`<button class="fbtn" onclick="tryAlt('${a.replace(/'/g,"\\'")}')">${a} ↗</button>`).join('')}</div></div>`:''}`;
+  const l=L(); const out=document.getElementById('ai-out');
+  out.innerHTML=`<div class="mres">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px">
+<div><div style="font-size:17px;font-weight:700;color:var(--g8)">${r.meal_name}</div><div style="font-size:11px;color:var(--g4);margin-top:2px">${r.tagline} · ${r.time} · ${r.spice}</div></div>
+<div style="text-align:center;flex-shrink:0"><div style="font-size:20px;font-weight:800;color:${sc(r.health_score)}">${r.health_score}/10</div><div style="font-size:9px;color:var(--g4)">${l.hs}</div></div>
+</div>
+<div class="ban g" style="margin-bottom:9px">${r.health_score>=8?'✅':r.health_score>=6?'⚠️':'🔴'} ${r.verdict}</div>
+<div class="ngd">
+<div class="nb"><div class="nv">${r.calories}</div><div class="nl">${l.kcal}</div></div>
+<div class="nb"><div class="nv">${r.protein_g}g</div><div class="nl">${l.prot}</div></div>
+<div class="nb"><div class="nv">${r.fibre_g}g</div><div class="nl">${l.fib}</div></div>
+<div class="nb"><div class="nv">${r.fat_g}g</div><div class="nl">${l.fat}</div></div>
+</div>
+<div style="font-size:10px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 5px">${l.ih}</div>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">${r.ingredients_used.map(i=>`<span style="background:var(--gl);color:var(--gr);border:1px solid #86efac;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:500">${i}</span>`).join('')}</div>
+<div style="font-size:10px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${l.hm}</div>
+${r.steps.map((s,i)=>`<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--g2);font-size:13px;color:var(--g6);line-height:1.5"><div style="width:19px;height:19px;border-radius:50%;background:var(--gl);color:var(--gr);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${i+1}</div><div>${s}</div></div>`).join('')}
+${r.pro_tips?.length?`<div style="background:var(--al);border-radius:6px;padding:10px;margin-top:10px"><div style="font-size:10px;font-weight:700;color:var(--am);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">${l.ptips}</div>${r.pro_tips.map(t=>`<div style="font-size:13px;color:#92400e;padding:2px 0;line-height:1.5">• ${t}</div>`).join('')}</div>`:''}
+${r.why_good?.length?`<div style="background:var(--gl);border-radius:6px;padding:10px;margin-top:8px"><div style="font-size:10px;font-weight:700;color:var(--gr);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">${l.wg}</div>${r.why_good.map(w=>`<div style="font-size:13px;color:#14532d;padding:2px 0;line-height:1.5">• ${w}</div>`).join('')}</div>`:''}
+${r.next_time?`<div style="background:var(--rl);border-radius:6px;padding:8px 10px;margin-top:8px;font-size:13px;color:#7f1d1d;line-height:1.5"><b>${l.nt}</b> ${r.next_time}</div>`:''}
+</div>
+${r.alternatives?.length?`<div class="card" style="padding:12px"><div style="font-size:13px;font-weight:600;color:var(--g6);margin-bottom:6px">${l.om}</div><div style="display:flex;gap:5px;flex-wrap:wrap">${r.alternatives.map(a=>`<button class="fbtn" onclick="tryAlt('${a.replace(/'/g,"\\'")}')">${a} ↗</button>`).join('')}</div></div>`:''}`;
   out.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function tryAlt(name){
-  document.getElementById('ai-note').value='Make me: '+name;
-  buildMeal();window.scrollTo({top:0,behavior:'smooth'});
+  const an=document.getElementById('ai-note'); if(an)an.value='Make me: '+name;
+  buildMeal(); window.scrollTo({top:0,behavior:'smooth'});
 }
-rPresets();rTags();
 
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+// ═══════════════════════════
+// INIT
+// ═══════════════════════════
+(function init(){
+  // set correct lang button active
+  document.querySelectorAll('.lbtn').forEach(b=>{
+    b.classList.remove('on');
+    if((lang==='en'&&b.textContent.trim()==='EN')||
+       (lang==='hi'&&b.textContent.trim()==='हि')||
+       (lang==='mr'&&b.textContent.trim()==='म'))
+      b.classList.add('on');
+  });
+  // restore streak
+  const sn=document.getElementById('stk-n');
+  if(sn)sn.textContent=localStorage.getItem(SK)||'0';
+  // restore api key in box
+  const k=getKey();
+  if(k){
+    const aki=document.getElementById('aki'); if(aki)aki.value=k;
+    const aks=document.getElementById('aks');
+    if(aks){aks.textContent=T[lang].ak_ok;aks.className='aks akok';aks.style.display='block';}
+  }
+  // add meal selects dynamically
+  const swSlot=document.getElementById('sw-meal-sel');
+  const aiSlot=document.getElementById('ai-meal-sel');
+  if(!swSlot){
+    const sel=document.createElement('select');sel.className='sel';sel.id='sw-meal-sel';
+    const swMealOrig=document.getElementById('sw-opt-wrap');
+    if(swMealOrig)swMealOrig.parentNode.replaceChild(sel,swMealOrig);
+  }
+  if(!aiSlot){
+    const sel2=document.createElement('select');sel2.className='sel';sel2.id='ai-meal-sel';
+    document.getElementById('p-ai').querySelector('.card').insertBefore(sel2, document.getElementById('al2').nextSibling);
+  }
+  // apply all translations
+  applyLang();
+  // select today's diet pill
+  setTimeout(()=>{
+    const todayIdx=new Date().getDay();
+    const pillIdx=todayIdx===0?6:todayIdx-1;
+    const pills=document.querySelectorAll('.dp');
+    if(pills[pillIdx]){showDay(DK[pillIdx],pills[pillIdx]);pills[pillIdx].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}
+  },80);
+  // load tracker state
+  loadT();
+  // render swap history
+  renderSwapH();
+})();
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+
 </script>
 </body>
 </html>
